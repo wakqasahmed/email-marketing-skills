@@ -77,6 +77,12 @@
     "url": "https://ico.org.uk/for-organisations/direct-marketing-and-privacy-and-electronic-communications/guide-to-pecr/electronic-and-telephone-marketing/using-marketing-lists/",
     "supports": "Be transparent about marketing use and collect clear, channel-specific opt-in."
   },
+  "ICO-CONSENT-01": {
+    "publisher": "UK Information Commissioner’s Office",
+    "title": "How should we obtain, record and manage consent?",
+    "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/consent/how-should-we-obtain-record-and-manage-consent/",
+    "supports": "Keep a specific audit trail of who consented, when, what they were told, how they consented, and later withdrawal; retain the matching statement or form version."
+  },
   "HUB-CONSENT-01": {
     "publisher": "HubSpot Knowledge Base",
     "title": "Understand opt-in consent for email",
@@ -142,6 +148,24 @@
     "title": "Integrate Google Analytics with Mailchimp",
     "url": "https://mailchimp.com/help/integrate-google-analytics-with-mailchimp/",
     "supports": "UTM/link tracking and post-click conversion measurement."
+  },
+  "MC-GDPR-01": {
+    "publisher": "Mailchimp Help Center",
+    "title": "Collect Consent with GDPR Forms",
+    "url": "https://mailchimp.com/help/collect-consent-with-gdpr-forms/",
+    "supports": "Explain why data is collected, offer separate affirmative choices for marketing activities, identify the collector, and retain the form version shown at signup."
+  },
+  "MC-DOI-01": {
+    "publisher": "Mailchimp Help Center",
+    "title": "About Double Opt-in",
+    "url": "https://mailchimp.com/help/about-double-opt-in/",
+    "supports": "Double opt-in adds a confirmation step; only after verification is a contact added as subscribed, and the method should be selected for the company’s needs or requirements."
+  },
+  "MC-PROFILE-01": {
+    "publisher": "Mailchimp Help Center",
+    "title": "About Contact Profile Pages",
+    "url": "https://mailchimp.com/help/about-contact-profile-pages/",
+    "supports": "Contact profiles expose signup origin, marketing state, opted-in date, permission timestamp, signup method, and the text version of a GDPR-enabled signup form."
   },
   "LIT-ACCESS-01": {
     "publisher": "Litmus",
@@ -232,6 +256,24 @@
     "title": "How to create an email welcome series",
     "url": "https://help.klaviyo.com/hc/en-us/articles/115002775172",
     "supports": "Immediate welcome, three-email baseline over one week, incentive delivery, story, products, and testing."
+  },
+  "KL-CONSENT-01": {
+    "publisher": "Klaviyo Help Center",
+    "title": "How to collect GDPR-compliant consent",
+    "url": "https://help.klaviyo.com/hc/en-us/articles/360003536031",
+    "supports": "Use granular marketing choices and retain the form ID, capture method, form version, and exact language associated with consent."
+  },
+  "KL-DOI-01": {
+    "publisher": "Klaviyo Help Center",
+    "title": "Understanding the double opt-in process",
+    "url": "https://help.klaviyo.com/hc/en-us/articles/115005251108",
+    "supports": "Double opt-in verifies a submitted address or number; only confirmed subscribers join the list and enter welcome, while unconfirmed submissions remain outside the subscribed list."
+  },
+  "KL-FORMS-01": {
+    "publisher": "Klaviyo Help Center",
+    "title": "How to reduce spam complaint rates",
+    "url": "https://help.klaviyo.com/hc/en-us/articles/360057985791",
+    "supports": "Signup forms should identify the contacted channels, data use, expected content, and preference or frequency choices; confirmation and double opt-in help align expectations."
   },
   "KL-CART-01": {
     "publisher": "Klaviyo Help Center",

@@ -19,7 +19,7 @@ Plan a welcome series for new subscribers. Include the campaign map, test design
 ```
 
 ## Scope
-The taxonomy covers recurring editorial mail, welcome/onboarding, lead nurture, promotions, launches, events, ecommerce behavioral flows, post-purchase/customer success, reviews, cross-sell, replenishment/renewal, winback/sunset, transactional mail, B2B outbound, inventory/price alerts, loyalty/referrals, jurisdiction routing, and lifecycle orchestration.
+The taxonomy covers recurring editorial mail, welcome/onboarding, lead nurture, promotions, launches, events, ecommerce behavioral flows, post-purchase/customer success, reviews, cross-sell, replenishment/renewal, winback/sunset, transactional mail, B2B outbound, inventory/price alerts, loyalty/referrals, jurisdiction routing, lifecycle orchestration, and permission-first list growth.
 
 These are composable archetypes rather than a claim that every company uses the same labels. A birthday message, for example, normally combines the promotional skill with lifecycle/date-trigger logic; a trial-expiry message combines onboarding, renewal, and transactional classification.
 
@@ -33,12 +33,13 @@ These are composable archetypes rather than a claim that every company uses the 
 ## How an agent should use the pack
 1. Load the `00-email-marketing-guardrails` skill.
 2. Apply `18-jurisdiction-compliance-routing` before drafting when a recipient is in the US, UK, EEA, or Canada; the sender or sending system is in Canada; or a jurisdiction is unknown or conflicting.
-3. Select the closest campaign-specific `SKILL.md`.
-4. Load `19-lifecycle-orchestration` when contacts can qualify for multiple flows or channels.
-5. Combine multiple skills only when the message genuinely spans campaign types.
-6. Collect missing inputs; never fabricate them.
-7. Produce the mandatory output and a `SEND`, `HOLD`, or `BLOCK` decision.
-8. Re-check the live source before relying on legal or mailbox-provider requirements that may have changed after `2026-07-15`.
+3. Apply `20-list-growth-signup-preferences` before publishing or changing subscriber capture, double opt-in, preference-center, or lead-magnet flows.
+4. Select the closest campaign-specific `SKILL.md`.
+5. Load `19-lifecycle-orchestration` when contacts can qualify for multiple flows or channels.
+6. Combine multiple skills only when the message genuinely spans campaign types.
+7. Collect missing inputs; never fabricate them.
+8. Produce the mandatory output and a `SEND`, `HOLD`, or `BLOCK` decision.
+9. Re-check the live source before relying on legal or mailbox-provider requirements that may have changed after `2026-07-15`.
 
 ## Skills
 
@@ -62,6 +63,7 @@ These are composable archetypes rather than a claim that every company uses the 
 - `17-loyalty-vip-referral`: VIP, loyalty, and referral campaigns.
 - `18-jurisdiction-compliance-routing`: sender and recipient jurisdiction facts and operational routing before drafting for US, UK, EEA, Canadian, or unresolved groups.
 - `19-lifecycle-orchestration`: contact-level collision and frequency governance across flows.
+- `20-list-growth-signup-preferences`: first-party signup consent, double opt-in, preferences, lead magnets, and confirmed welcome handoff.
 
 ## Files
 - `skills/00-email-marketing-guardrails/SKILL.md`: hard gates for all campaigns (`GLOBAL_GUARDRAILS.md` remains as a pointer).
