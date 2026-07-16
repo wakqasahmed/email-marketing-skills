@@ -13,7 +13,7 @@ Use this skill only after applying the `00-email-marketing-guardrails` skill (`.
 - Record each recipient's country or region, the sender's establishment, and any known location or sector factors that could change the applicable rule. [FTC-01][ICO-01][EU-EC-01][CRTC-CASL-01]
 - Record the message's primary purpose, recipient type, address source, signup language, consent or other documented basis, prior customer relationship, and current suppression status. [FTC-01][ICO-02][EU-EC-01][CRTC-CASL-01]
 - Keep recipients with different routing results out of one send until each group has passed its applicable checks. [FTC-01][ICO-01][EU-EC-01][CRTC-CASL-01]
-- Do not draft recipient-facing marketing content until these facts produce a non-`BLOCK` routing result. [FTC-01][ICO-01][EU-EC-01][CRTC-CASL-01]
+- Do not draft recipient-facing marketing content until all routing facts are complete and the routing result is `SEND`. [FTC-01][ICO-01][EU-EC-01][CRTC-CASL-01]
 
 ## Route the recipient group
 - **US:** Apply the CAN-SPAM commercial-message classification, identity, address, truthful-header/subject, and opt-out operational checks; do not present this US route as a universal permission standard. [FTC-01]
@@ -35,4 +35,4 @@ Return all of the following before campaign-specific drafting:
 ## Agent restrictions
 - Never describe US, UK, EEA, or Canadian requirements as universally applicable. [FTC-01][ICO-01][EU-EC-01][CRTC-CASL-01]
 - Never decide an unresolved legal basis, statutory exception, or cross-border applicability question; return `BLOCK` and direct it to qualified counsel. [ICO-01][EU-EC-01][CRTC-CASL-01]
-- Never turn a `HOLD` or `BLOCK` routing result into send-ready copy. [FTC-01][ICO-01][EU-EC-01][CRTC-CASL-01]
+- Never turn a `HOLD` or `BLOCK` routing result into recipient-facing copy. [FTC-01][ICO-01][EU-EC-01][CRTC-CASL-01]
