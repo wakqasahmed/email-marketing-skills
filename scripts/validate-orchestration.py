@@ -2,7 +2,7 @@
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
-skill = root / "skills" / "18-lifecycle-orchestration" / "SKILL.md"
+skill = root / "skills" / "19-lifecycle-orchestration" / "SKILL.md"
 
 if not skill.is_file():
     raise SystemExit("Missing lifecycle orchestration skill")

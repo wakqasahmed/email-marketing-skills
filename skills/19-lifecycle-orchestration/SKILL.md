@@ -1,5 +1,5 @@
 ---
-name: 18-lifecycle-orchestration
+name: 19-lifecycle-orchestration
 description: Resolve contact-level collisions across lifecycle flows with deterministic ownership, frequency, suppression, holdout, calendar, and monitoring rules.
 version: 1.0.0
 last_reviewed: 2026-07-16
