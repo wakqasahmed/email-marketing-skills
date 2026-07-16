@@ -2,7 +2,7 @@
   "name": "email-marketing-skill-pack",
   "version": "1.0.0",
   "last_reviewed": "2026-07-16",
-  "skill_count": 18,
+  "skill_count": 19,
   "skills": [
     "00-email-marketing-guardrails",
     "01-newsletter-editorial",
@@ -21,7 +21,8 @@
     "14-transactional-service",
     "15-b2b-outbound-prospecting",
     "16-inventory-price-alert",
-    "17-loyalty-vip-referral"
+    "17-loyalty-vip-referral",
+    "18-jurisdiction-compliance-routing"
   ],
-  "source_count": 65
+  "source_count": 69
 }

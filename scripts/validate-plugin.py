@@ -27,4 +27,26 @@ missing_ref = [
 if missing_ref:
     raise SystemExit("Campaign skills missing the guardrails dependency: " + ", ".join(missing_ref))
 
+router = root / "skills/18-jurisdiction-compliance-routing/SKILL.md"
+if router.is_file():
+    router_content = router.read_text()
+    required_router_clauses = {
+        "fact-first drafting gate": "until all routing facts are complete and the routing result is `SEND`",
+        "US route": "**US:**",
+        "UK route": "**UK:**",
+        "EEA route": "**EEA:**",
+        "Canada route": "**Canada:**",
+        "outbound-Canada routing": "For a Canada-to-non-Canadian recipient group, return `BLOCK`",
+        "unknown-jurisdiction route": "**Unknown or conflicting jurisdiction:**",
+        "no universal assertion": "Never describe US, UK, EEA, or Canadian requirements as universally applicable.",
+        "HOLD/BLOCK copy prohibition": "Never turn a `HOLD` or `BLOCK` routing result into recipient-facing copy.",
+    }
+    missing_router_clauses = [
+        description for description, clause in required_router_clauses.items() if clause not in router_content
+    ]
+    if missing_router_clauses:
+        raise SystemExit(
+            "Jurisdiction router is missing required contract clauses: " + ", ".join(missing_router_clauses)
+        )
+
 print(f"validated {len(skills)} plugin skill paths")

@@ -23,6 +23,30 @@
     "url": "https://senders.yahooinc.com/best-practices/",
     "supports": "SPF, DKIM, DMARC alignment, easy unsubscribe, complaint control, and list practices."
   },
+  "CRTC-CASL-01": {
+    "publisher": "Canadian Radio-television and Telecommunications Commission",
+    "title": "Frequently Asked Questions about Canada's Anti-Spam Legislation",
+    "url": "https://www.crtc.gc.ca/eng/com500/faq500.htm",
+    "supports": "CASL CEMs require consent, identification information, and an unsubscribe mechanism; CEMs sent using a computer system in Canada generally remain subject to CASL when sent abroad, subject to limited exemptions."
+  },
+  "CRTC-CASL-02": {
+    "publisher": "Canadian Radio-television and Telecommunications Commission",
+    "title": "CASL Guidance on Implied Consent",
+    "url": "https://crtc.gc.ca/eng/com500/guide.htm",
+    "supports": "CASL distinguishes express and implied consent; senders must be able to substantiate the consent they rely on."
+  },
+  "EU-EC-01": {
+    "publisher": "European Commission",
+    "title": "Legal grounds for processing data",
+    "url": "https://commission.europa.eu/law/law-topic/data-protection/rules-business-and-organisations/legal-grounds-processing-data_en",
+    "supports": "GDPR processing requires an applicable legal ground; direct-marketing processing must be assessed under EU data-protection law."
+  },
+  "EU-EC-02": {
+    "publisher": "European Commission",
+    "title": "When can personal data be processed?",
+    "url": "https://commission.europa.eu/law/law-topic/data-protection/rules-business-and-organisations/legal-grounds-processing-data/grounds-processing/when-can-personal-data-be-processed_en",
+    "supports": "Legitimate-interest processing requires a case-specific assessment that the person's rights and freedoms do not override the interest."
+  },
   "FTC-01": {
     "publisher": "U.S. Federal Trade Commission",
     "title": "CAN-SPAM Act: A Compliance Guide for Business",
