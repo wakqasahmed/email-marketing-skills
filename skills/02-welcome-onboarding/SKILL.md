@@ -34,7 +34,7 @@ A welcome series begins immediately after a valid signup and introduces the valu
 
 **Don't**
 - Don't trigger a welcome without a documented permission event. [ICO-02][KL-WELCOME-01]
-- Don't cram everything into one email; the evidence-based baseline is three emails over about a week. [KL-WELCOME-01]
+- Don't cram everything into one email; Klaviyo's baseline is three emails over about a week. [KL-WELCOME-01]
 - Don't keep sending after activation, unsubscribe, or complaint. [HUB-WF-01][GMAIL-01]
 - Don't include social proof that is not from verified assets. [FTC-01][KL-WELCOME-01]
 
