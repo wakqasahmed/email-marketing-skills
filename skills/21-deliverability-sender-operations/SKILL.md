@@ -23,7 +23,7 @@ Sender operations determine whether authenticated, well-behaved mail reaches the
 - Authenticate every sending domain with SPF or DKIM at minimum, and require SPF, DKIM, and DMARC alignment for bulk sending. [GMAIL-01][YAHOO-01]
 - Publish the DMARC record as a `_dmarc.<domain>` TXT record with a `p=` policy tag (`none`, `quarantine`, or `reject`), and set up SPF and DKIM before publishing DMARC; a message passes DMARC only when it passes SPF with SPF alignment or DKIM with DKIM alignment. [GOOGLE-DMARC-01]
 - Verify TLS support, valid forward and reverse DNS/PTR records, and a stable, aligned visible `From` identity for each sending domain and IP. [GMAIL-01]
-- For domains sending 5,000 or more messages per day to Outlook.com/Microsoft mailboxes, verify SPF, DKIM, and DMARC are all in place; unauthenticated mail from qualifying senders is junked and is planned to be rejected. [MS-SNDS-01]
+- For domains sending more than 5,000 messages per day to Outlook.com/Microsoft mailboxes, verify SPF, DKIM, and DMARC are all in place; unauthenticated mail from qualifying senders is junked and is planned to be rejected. [MS-SNDS-01]
 - Treat any domain or IP without verified SPF/DKIM, or without an aligned DMARC record for bulk sending, as authentication-incomplete and not send-ready. [GMAIL-01][YAHOO-01][GOOGLE-DMARC-01]
 
 ### List hygiene, bounce, complaint, and suppression handling
@@ -85,7 +85,7 @@ Return all of the following:
 5. Warm-up/ramp or recovery plan when applicable: staged volume schedule, most-engaged-first targeting, and the trigger conditions that would pause or slow the ramp. [AWS-SES-WARM-01][BRAZE-HOLIDAY-01]
 6. Traffic-separation confirmation: transactional and marketing streams verified on separated sending infrastructure. [AWS-SES-SEP-01][BRAZE-TRANS-01]
 7. Monitoring plan: which signals are tracked (Postmaster Tools, provider feedback loops, delivery/bounce/complaint events), at what cadence, and the owner who acts on an alert. [GMAIL-03][AWS-SES-MON-01]
-8. Final `READY`, `RECOVER`, or `HALT` decision based on the evidence above. [GMAIL-01][GMAIL-02]
+8. Final `READY`, `RECOVER`, `HOLD`, `BLOCK`, or `HALT` decision based on the evidence above. [GMAIL-01][GMAIL-02]
 9. A source list containing every citation ID used.
 
 ## Agent restrictions
