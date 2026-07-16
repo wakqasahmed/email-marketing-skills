@@ -40,7 +40,7 @@ Evaluate each contact at reservation time and again immediately before send, rec
 - Defer non-urgent marketing to the first eligible local time after the quiet period only if the trigger remains valid; when timezone is unknown, use the documented conservative fallback or return `HOLD`. [BRAZE-STRAT-01][HUB-WF-01]
 - Build the deduplication key from contact, channel, purpose, authoritative event or subject entity, and flow step; atomically reserve it and suppress any matching reserved or sent message for the configured validity window. [BRAZE-TRIG-01][HUB-WF-01]
 - Define recent-purchase suppression by product/category, campaign purpose, and a documented lookback window; suppress stale acquisition, browse, cart, price, or incompatible recommendation messages while preserving relevant service and post-purchase information. [KL-BROWSE-01][KL-LOWSTOCK-01][KL-XSELL-01][BRAZE-TRANS-01]
-- Assign a stable holdout before flow entry, store experiment ID, unit, variant, start/end, and eligibility, and exclude that unit from every marketing treatment covered by the experiment; never withhold essential service messages. [KL-SEGTEST-01][BRAZE-TRANS-01]
+- Create a sampled control segment for the test window and exclude it from every marketing treatment covered by the test; preserve eligibility for transactional and essential service messages. [KL-SEGTEST-01]
 
 ## Mandatory output
 Return all of the following:
