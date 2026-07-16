@@ -18,6 +18,7 @@
     "./skills/14-transactional-service",
     "./skills/15-b2b-outbound-prospecting",
     "./skills/16-inventory-price-alert",
-    "./skills/17-loyalty-vip-referral"
+    "./skills/17-loyalty-vip-referral",
+    "./skills/18-lifecycle-orchestration"
   ]
 }

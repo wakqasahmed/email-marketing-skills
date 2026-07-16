@@ -19,7 +19,7 @@ Plan a welcome series for new subscribers. Include the campaign map, test design
 ```
 
 ## Scope
-The taxonomy covers recurring editorial mail, welcome/onboarding, lead nurture, promotions, launches, events, ecommerce behavioral flows, post-purchase/customer success, reviews, cross-sell, replenishment/renewal, winback/sunset, transactional mail, B2B outbound, inventory/price alerts, and loyalty/referrals.
+The taxonomy covers recurring editorial mail, welcome/onboarding, lead nurture, promotions, launches, events, ecommerce behavioral flows, post-purchase/customer success, reviews, cross-sell, replenishment/renewal, winback/sunset, transactional mail, B2B outbound, inventory/price alerts, loyalty/referrals, and lifecycle orchestration.
 
 These are composable archetypes rather than a claim that every company uses the same labels. A birthday message, for example, normally combines the promotional skill with lifecycle/date-trigger logic; a trial-expiry message combines onboarding, renewal, and transactional classification.
 
@@ -33,10 +33,11 @@ These are composable archetypes rather than a claim that every company uses the 
 ## How an agent should use the pack
 1. Load the `00-email-marketing-guardrails` skill.
 2. Select the closest campaign-specific `SKILL.md`.
-3. Combine multiple skills only when the message genuinely spans campaign types.
-4. Collect missing inputs; never fabricate them.
-5. Produce the mandatory output and a `SEND`, `HOLD`, or `BLOCK` decision.
-6. Re-check the live source before relying on legal or mailbox-provider requirements that may have changed after `2026-07-15`.
+3. Load `18-lifecycle-orchestration` when contacts can qualify for multiple flows or channels.
+4. Combine multiple campaign skills only when the message genuinely spans campaign types.
+5. Collect missing inputs; never fabricate them.
+6. Produce the mandatory output and a `SEND`, `HOLD`, or `BLOCK` decision.
+7. Re-check the live source before relying on legal or mailbox-provider requirements that may have changed after `2026-07-15`.
 
 ## Skills
 
@@ -58,6 +59,7 @@ These are composable archetypes rather than a claim that every company uses the 
 - `15-b2b-outbound-prospecting`: lawful, low-volume B2B outreach.
 - `16-inventory-price-alert`: back-in-stock, low-inventory, and price alerts.
 - `17-loyalty-vip-referral`: VIP, loyalty, and referral campaigns.
+- `18-lifecycle-orchestration`: contact-level collision and frequency governance across flows.
 
 ## Files
 - `skills/00-email-marketing-guardrails/SKILL.md`: hard gates for all campaigns (`GLOBAL_GUARDRAILS.md` remains as a pointer).
@@ -73,5 +75,6 @@ This is operational marketing guidance, not legal advice. Laws vary by recipient
 
 ```bash
 python3 scripts/validate-plugin.py
+python3 scripts/validate-orchestration.py
 scripts/list-skills.sh
 ```

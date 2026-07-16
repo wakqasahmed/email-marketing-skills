@@ -34,6 +34,7 @@ Apply these gates before every campaign-specific `SKILL.md`. A campaign that fai
 - Define eligibility and explicit exclusions before writing copy, including consent, lifecycle stage, geography, product availability, purchase status, and overlapping flow membership. [BRAZE-STRAT-01][HUB-WF-01]
 - Segment from reliable first-party behavior, preferences, lifecycle, and purchase data so content is relevant. [MC-SEG-01][BRAZE-STRAT-01]
 - Apply frequency caps, preference-center choices, quiet periods where appropriate, and conflict rules between campaigns. [BRAZE-STRAT-01][BRAZE-HOLIDAY-01]
+- Apply `18-lifecycle-orchestration` whenever a contact can qualify for multiple flows or channels so one contact-level policy owns precedence, caps, deduplication, suppression, and holdouts. [BRAZE-STRAT-01][HUB-WF-01]
 - Identify never-engaged or persistently inactive contacts, make at most a deliberate final re-engagement attempt, then suppress non-responders. [KL-NEVER-01][KL-SUNSET-01]
 
 ## 5. Creative and accessibility gate
