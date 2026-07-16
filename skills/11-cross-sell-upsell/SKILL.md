@@ -7,7 +7,7 @@ last_reviewed: 2026-07-15
 
 # Cross-Sell and Upsell
 
-Use this skill only after applying `../../GLOBAL_GUARDRAILS.md`.
+Use this skill only after applying the `00-email-marketing-guardrails` skill (`../00-email-marketing-guardrails/SKILL.md`).
 
 ## What and why
 A cross-sell recommends a complementary product, while an upsell recommends a more valuable alternative or expansion based on actual context. [KL-XSELL-01]

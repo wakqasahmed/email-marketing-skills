@@ -7,7 +7,7 @@ last_reviewed: 2026-07-15
 
 # Lead Nurture and Educational Drip
 
-Use this skill only after applying `../../GLOBAL_GUARDRAILS.md`.
+Use this skill only after applying the `00-email-marketing-guardrails` skill (`../00-email-marketing-guardrails/SKILL.md`).
 
 ## What and why
 A nurture sequence uses triggers, segmentation, and progressively relevant content to move a lead from initial interest toward a qualified next step. [HUB-WF-01][HUB-AUTO-01]

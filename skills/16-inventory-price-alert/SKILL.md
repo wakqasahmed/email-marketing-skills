@@ -7,7 +7,7 @@ last_reviewed: 2026-07-15
 
 # Back-in-Stock, Low-Inventory, and Price-Drop Alert
 
-Use this skill only after applying `../../GLOBAL_GUARDRAILS.md`.
+Use this skill only after applying the `00-email-marketing-guardrails` skill (`../00-email-marketing-guardrails/SKILL.md`).
 
 ## What and why
 These alerts notify a shopper when a requested item returns, a relevant item reaches a real stock threshold, or a previously viewed item has a verified price drop. [KL-STOCK-01][KL-LOWSTOCK-01][KL-PRICE-01]

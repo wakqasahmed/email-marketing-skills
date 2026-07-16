@@ -31,7 +31,7 @@ These are composable archetypes rather than a claim that every company uses the 
 - The pack does not promise “best ROI.” It requires measurable objectives, conversion/revenue/pipeline tracking, controlled tests, and holdouts where feasible.
 
 ## How an agent should use the pack
-1. Load `GLOBAL_GUARDRAILS.md`.
+1. Load the `00-email-marketing-guardrails` skill.
 2. Select the closest campaign-specific `SKILL.md`.
 3. Combine multiple skills only when the message genuinely spans campaign types.
 4. Collect missing inputs; never fabricate them.
@@ -40,6 +40,7 @@ These are composable archetypes rather than a claim that every company uses the 
 
 ## Skills
 
+- `00-email-marketing-guardrails`: mandatory cross-campaign gates; load first.
 - `01-newsletter-editorial`: recurring editorial newsletters.
 - `02-welcome-onboarding`: new-contact activation and first purchase.
 - `03-lead-nurture-education`: permissioned lead education.
@@ -59,7 +60,7 @@ These are composable archetypes rather than a claim that every company uses the 
 - `17-loyalty-vip-referral`: VIP, loyalty, and referral campaigns.
 
 ## Files
-- `GLOBAL_GUARDRAILS.md`: hard gates for all campaigns.
+- `skills/00-email-marketing-guardrails/SKILL.md`: hard gates for all campaigns (`GLOBAL_GUARDRAILS.md` remains as a pointer).
 - `skills/*/SKILL.md`: campaign-specific what/why/when/where/how instructions.
 - `SOURCES.md`: verification ledger.
 - `SOURCE_INDEX.json`: machine-readable source registry.

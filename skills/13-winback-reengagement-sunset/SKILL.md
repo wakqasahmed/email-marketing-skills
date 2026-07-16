@@ -7,7 +7,7 @@ last_reviewed: 2026-07-15
 
 # Winback, Re-Engagement, and Sunset
 
-Use this skill only after applying `../../GLOBAL_GUARDRAILS.md`.
+Use this skill only after applying the `00-email-marketing-guardrails` skill (`../00-email-marketing-guardrails/SKILL.md`).
 
 ## What and why
 A winback flow targets past customers after a meaningful lapse; a sunset flow makes a final permission/value check and suppresses contacts who remain unresponsive. [KL-WINBACK-01][KL-SUNSET-01]

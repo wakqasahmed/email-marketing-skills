@@ -7,7 +7,7 @@ last_reviewed: 2026-07-15
 
 # Product or Feature Launch Campaign
 
-Use this skill only after applying `../../GLOBAL_GUARDRAILS.md`.
+Use this skill only after applying the `00-email-marketing-guardrails` skill (`../00-email-marketing-guardrails/SKILL.md`).
 
 ## What and why
 A launch campaign coordinates a sequence of messages that explains what is new, who it is for, why it matters, and what the recipient should do next. [HUB-LAUNCH-01][BRAZE-STRAT-01]
