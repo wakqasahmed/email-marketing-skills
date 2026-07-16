@@ -2,7 +2,7 @@
 name: 14-transactional-service
 description: Create essential event-triggered messages such as verification, password reset, receipt, shipping, account, security, and service-status emails.
 version: 1.0.0
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 # Transactional and Service Email
@@ -36,20 +36,27 @@ A transactional email delivers essential information tied to a user action, purc
 - Don't ship unvalidated dynamic data or raw merge tags. [LIT-QA-01]
 - Don't queue essential messages behind marketing volume. [BRAZE-TRANS-01][AWS-SES-SEP-01]
 
+## Examples
+- Password reset: trigger only from a verified reset request tied to the account, send only to the address of record, state the required action and expiry, and never bundle product or promotional content. [BRAZE-TRIG-01][BRAZE-TRANS-01]
+- Order receipt: trigger from the confirmed order/payment event, show amount, item, and status with no marketing cross-sell content added to the primary purpose. [BRAZE-TRANS-01][FTC-01]
+- Security alert (new sign-in, password changed): trigger from the authoritative security event, send only to the affected account, and treat any delay as a monitoring failure requiring investigation, not a scheduling choice. [BRAZE-TRIG-01][AWS-SES-MON-01][GMAIL-03]
+
 ## Mandatory output
 Return all of the following:
-1. Campaign objective and one primary business KPI.
-2. Audience, eligibility, exclusions, and consent/lawful-basis note.
-3. Trigger or send schedule, including exit and suppression rules.
-4. Message map showing the job of each email, subject-line hypotheses, body outline, personalization, and one primary CTA.
-5. Measurement plan with UTMs, conversion event, attribution window, and guardrail metrics.
-6. Test plan that changes one major variable at a time and names the winning metric.
-7. Pre-send QA checklist and a final `SEND`, `HOLD`, or `BLOCK` decision.
+1. Event and trigger authority: source system, event type/ID, and the authoritative event that justifies this send. [BRAZE-TRIG-01][BRAZE-TRANS-01]
+2. Recipient binding: confirmation the message goes only to the account/address tied to the triggering event, with no list or segment substituted. [BRAZE-TRANS-01]
+3. Stream and template: confirmation of the transactional stream/template, kept separate from marketing sending infrastructure. [BRAZE-TRANS-01][AWS-SES-SEP-01]
+4. Content outline: essential fact, item/account, amount or status, timestamp, required action, support path, and security guidance where relevant, with confirmation no promotional or marketing content is present. [BRAZE-TRANS-01][FTC-01]
+5. Delivery and monitoring plan: expected latency, failure/retry handling, and the metrics to track (delivery, bounce, authentication, completion of the required action). [GMAIL-03][AWS-SES-MON-01][MC-REPORT-01]
+6. Security/privacy handling note for any message carrying account, password, or security-sensitive detail, including recipient-identity binding. [BRAZE-TRANS-01][FTC-01]
+7. Pre-send QA checklist covering dynamic-data validation, rendering, plain-text fallback, and link checks, followed by a final `SEND`, `HOLD`, or `BLOCK` decision based on trigger authority, recipient accuracy, and delivery readiness. [LIT-QA-01][LIT-TEST-01][AWS-SES-FORMAT-01]
 8. A source list containing every citation ID used.
 
 ## Agent restrictions
-- Never invent product facts, customer proof, discounts, deadlines, scarcity, legal permission, or performance claims. [FTC-01][BRAZE-STRAT-01]
-- Never infer consent merely because an address exists; verify the permitted purpose, channel, source, jurisdiction, and suppression status. [ICO-01][ICO-02][HUB-CONSENT-01]
-- Never optimize for opens alone; use clicks, conversions, revenue, retention, qualified replies, or pipeline as the primary outcome. [LIT-MPP-01][MC-CONV-01][BRAZE-METRIC-01]
-- Never claim a universal best send time; use recipient-level optimization or a controlled timing test. [MC-TIME-01][MC-AB-01]
-- Never send until authentication, suppression, tracking, rendering, links, personalization fallbacks, and accessibility checks pass. [GMAIL-01][YAHOO-01][LIT-QA-01][LIT-TEST-01]
+- Never send without a verified, authoritative trigger event bound to the specific recipient; never infer or fabricate an event to justify a send. [BRAZE-TRIG-01][BRAZE-TRANS-01]
+- Never expand delivery beyond the account/address bound to the triggering event, and never substitute a marketing list or segment for the affected recipient. [BRAZE-TRANS-01]
+- Never add promotional content, discounts, cross-sell, or a marketing call to action that changes the message's primary purpose; if commercial content is required, apply the marketing consent and opt-out rules instead. [BRAZE-TRANS-01][FTC-01]
+- Never disguise a marketing message as a receipt, security alert, password reset, or reply notification. [FTC-01][BRAZE-TRANS-01]
+- Never delay or queue an essential message behind marketing volume, and never route it through non-transactional infrastructure. [BRAZE-TRANS-01][AWS-SES-SEP-01]
+- Never ship unvalidated dynamic data, raw merge tags, or unverified links, especially in messages carrying account, financial, or security detail. [LIT-QA-01][LIT-TEST-01]
+- Never base a `SEND` decision on marketing metrics such as opens, clicks, or conversions; base it on trigger authority, recipient accuracy, and delivery/monitoring readiness. [AWS-SES-MON-01][GMAIL-03][BRAZE-TRANS-01]
