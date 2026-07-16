@@ -1,5 +1,7 @@
 # Global Email Marketing Guardrails
 
+Last reviewed: 2026-07-15
+
 Apply this file before every campaign-specific `SKILL.md`. A campaign that fails a hard gate must be marked `BLOCK`, not drafted as send-ready.
 
 ## 1. Classification and permission gate
