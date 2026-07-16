@@ -47,10 +47,9 @@ Return all of the following:
 2. Recipient binding: confirmation the message goes only to the account/address tied to the triggering event, with no list or segment substituted. [BRAZE-TRANS-01]
 3. Stream and template: confirmation of the transactional stream/template, kept separate from marketing sending infrastructure. [BRAZE-TRANS-01][AWS-SES-SEP-01]
 4. Content outline: essential fact, item/account, amount or status, timestamp, required action, support path, and security guidance where relevant, with confirmation no promotional or marketing content is present. [BRAZE-TRANS-01][FTC-01]
-5. Delivery and monitoring plan: expected latency, failure/retry handling, and the metrics to track (delivery, bounce, authentication, completion of the required action). [GMAIL-03][AWS-SES-MON-01][MC-REPORT-01]
-6. Security/privacy handling note for any message carrying account, password, or security-sensitive detail, including recipient-identity binding. [BRAZE-TRANS-01][FTC-01]
-7. Pre-send QA checklist covering dynamic-data validation, rendering, plain-text fallback, and link checks, followed by a final `SEND`, `HOLD`, or `BLOCK` decision based on trigger authority, recipient accuracy, and delivery readiness. [LIT-QA-01][LIT-TEST-01][AWS-SES-FORMAT-01]
-8. A source list containing every citation ID used.
+5. Delivery and monitoring plan: expected latency and the metrics to track (delivery, bounce, delivery delay, authentication, completion of the required action). [GMAIL-03][AWS-SES-MON-01][MC-REPORT-01]
+6. Pre-send QA checklist covering dynamic-data validation, rendering, plain-text fallback, and link checks, followed by a final `SEND`, `HOLD`, or `BLOCK` decision based on trigger authority, recipient accuracy, and delivery readiness. [LIT-QA-01][LIT-TEST-01][AWS-SES-FORMAT-01]
+7. A source list containing every citation ID used.
 
 ## Agent restrictions
 - Never send without a verified, authoritative trigger event bound to the specific recipient; never infer or fabricate an event to justify a send. [BRAZE-TRIG-01][BRAZE-TRANS-01]
