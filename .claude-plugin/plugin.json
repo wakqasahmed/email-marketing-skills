@@ -21,6 +21,7 @@
     "./skills/17-loyalty-vip-referral",
     "./skills/18-jurisdiction-compliance-routing",
     "./skills/19-lifecycle-orchestration",
-    "./skills/20-list-growth-signup-preferences"
+    "./skills/20-list-growth-signup-preferences",
+    "./skills/21-deliverability-sender-operations"
   ]
 }

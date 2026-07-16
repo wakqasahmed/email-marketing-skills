@@ -460,5 +460,29 @@
     "title": "Resend an Unopened Email",
     "url": "https://mailchimp.com/help/resend-an-unopened-campaign/",
     "supports": "Resending can increase unsubscribes and complaints, especially when repeated; use cautiously."
+  },
+  "AWS-SES-WARM-01": {
+    "publisher": "Amazon Web Services",
+    "title": "Warming up dedicated IP addresses (standard)",
+    "url": "https://docs.aws.amazon.com/ses/latest/dg/dedicated-ip-warming.html",
+    "supports": "New sending domains/IPs need gradual volume warm-up (reputation-building time varies by provider); automatic SES warm-up ramps over 45 days; send to engaged recipients first and avoid a sudden large volume increase after warm-up completes."
+  },
+  "GOOGLE-DMARC-01": {
+    "publisher": "Google Workspace Admin Help",
+    "title": "Set up DMARC",
+    "url": "https://knowledge.workspace.google.com/admin/security/set-up-dmarc",
+    "supports": "DMARC record location is a `_dmarc.<domain>` TXT record with a required `p=` policy tag (none/quarantine/reject); set up SPF and DKIM first; a message passes DMARC via SPF authentication+alignment or DKIM authentication+alignment."
+  },
+  "IETF-RFC8058-01": {
+    "publisher": "IETF",
+    "title": "RFC 8058: Signaling One-Click Functionality for List Email Headers",
+    "url": "https://www.rfc-editor.org/rfc/rfc8058.txt",
+    "supports": "Defines one-click unsubscribe: an HTTPS `List-Unsubscribe` URI plus `List-Unsubscribe-Post: List-Unsubscribe=One-Click`, processed by a single POST with no confirmation page."
+  },
+  "MS-SNDS-01": {
+    "publisher": "Microsoft",
+    "title": "Outlook.com postmaster / IP and domain management",
+    "url": "https://substrate.office.com/ip-domain-management-snds/postmaster",
+    "supports": "Since May 5, 2025, Outlook.com enforces SPF/DKIM/DMARC authentication for domains sending 5,000+ messages per day; unauthenticated qualifying mail is junked, with rejection planned for continued non-compliance."
   }
 }
