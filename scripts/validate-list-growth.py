@@ -63,21 +63,23 @@ missing = validate(text)
 if missing:
     raise SystemExit("List-growth contract missing: " + ", ".join(missing))
 
-mutations = {
-    "complete record": "exact consent statement and form version",
-    "address verification": "never silently rewrite an address",
-    "conditional use": "not a universal legal requirement",
-    "pending state": "send only the confirmation message",
-    "welcome handoff": "never trigger the marketing welcome flow from `PENDING_CONFIRMATION`",
-    "preferences": "without overwriting the prior audit trail",
-    "lead magnet": "without presenting access as proof of consent to undisclosed marketing",
-    "prohibited acquisition": "bought, rented, scraped, harvested, publicly copied",
-    "incomplete record": "`HOLD: CONSENT_RECORD_INCOMPLETE`",
-    "pending confirmation": "exclude the contact from marketing and welcome",
-    "preference change": "exclude weekly product news",
-    "welcome handoff": "pass the complete consent and preference record",
-}
-for expected_failure, deleted_text in mutations.items():
+mutations = (
+    ("complete record", "exact consent statement and form version"),
+    ("address verification", "never silently rewrite an address"),
+    ("conditional use", "not a universal legal requirement"),
+    ("pending state", "send only the confirmation message"),
+    ("welcome handoff", "never trigger the marketing welcome flow from `PENDING_CONFIRMATION`"),
+    ("preferences", "without overwriting the prior audit trail"),
+    ("lead magnet", "without presenting access as proof of consent to undisclosed marketing"),
+    ("prohibited acquisition", "bought, rented, scraped, harvested, publicly copied"),
+    ("incomplete record", "`HOLD: CONSENT_RECORD_INCOMPLETE`"),
+    ("pending confirmation", "exclude the contact from marketing and welcome"),
+    ("preference change", "exclude weekly product news"),
+    ("welcome handoff", "pass the complete consent and preference record"),
+)
+assert len(mutations) == 12, f"Expected 12 list-growth mutations, found {len(mutations)}"
+
+for expected_failure, deleted_text in mutations:
     mutated = text.replace(deleted_text, "", 1)
     if mutated == text:
         raise SystemExit(f"Mutation fixture missing: {expected_failure}")
