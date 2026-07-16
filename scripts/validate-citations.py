@@ -28,17 +28,20 @@ if manifest.get("skill_count") != len(skill_files):
 
 used = set()
 for path in [root / "GLOBAL_GUARDRAILS.md", *skill_files]:
+    unregistered = set()
     for cite in re.findall(r"\[([A-Z][A-Z0-9-]*-\d+)\]", path.read_text()):
         used.add(cite)
         if cite not in index:
-            errors.append(f"{path.relative_to(root)} cites unregistered ID [{cite}]")
+            unregistered.add(cite)
+    for cite in sorted(unregistered):
+        errors.append(f"{path.relative_to(root)} cites unregistered ID [{cite}]")
 
 unused = sorted(set(index) - used)
 if unused:
     errors.append(f"registered but never cited: {unused}")
 
 today = datetime.date.today()
-for path in [root / "SOURCES.md", *skill_files]:
+for path in [root / "SOURCES.md", root / "GLOBAL_GUARDRAILS.md", *skill_files]:
     match = re.search(r"^(?:last_reviewed|Last reviewed): (\d{4}-\d{2}-\d{2})$", path.read_text(), re.M)
     if not match:
         errors.append(f"{path.relative_to(root)} has no last_reviewed date")
@@ -47,8 +50,10 @@ for path in [root / "SOURCES.md", *skill_files]:
     if age > 180:
         warnings.append(f"{path.relative_to(root)} last reviewed {age} days ago; re-verify its sources")
 
+import os
 for warning in warnings:
-    print(f"WARNING: {warning}")
+    prefix = "::warning::" if os.environ.get("GITHUB_ACTIONS") else "WARNING: "
+    print(f"{prefix}{warning}")
 if errors:
     for error in errors:
         print(f"ERROR: {error}", file=sys.stderr)
