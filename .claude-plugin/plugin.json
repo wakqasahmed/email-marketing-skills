@@ -1,0 +1,22 @@
+{
+  "name": "email-marketing-skills",
+  "skills": [
+    "./skills/01-newsletter-editorial",
+    "./skills/02-welcome-onboarding",
+    "./skills/03-lead-nurture-education",
+    "./skills/04-promotional-offer",
+    "./skills/05-product-launch",
+    "./skills/06-event-webinar",
+    "./skills/07-abandoned-cart",
+    "./skills/08-browse-abandonment",
+    "./skills/09-post-purchase-customer-success",
+    "./skills/10-review-feedback-survey",
+    "./skills/11-cross-sell-upsell",
+    "./skills/12-replenishment-renewal",
+    "./skills/13-winback-reengagement-sunset",
+    "./skills/14-transactional-service",
+    "./skills/15-b2b-outbound-prospecting",
+    "./skills/16-inventory-price-alert",
+    "./skills/17-loyalty-vip-referral"
+  ]
+}

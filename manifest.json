@@ -1,0 +1,26 @@
+{
+  "name": "email-marketing-skill-pack",
+  "version": "1.0.0",
+  "last_reviewed": "2026-07-15",
+  "skill_count": 17,
+  "skills": [
+    "01-newsletter-editorial",
+    "02-welcome-onboarding",
+    "03-lead-nurture-education",
+    "04-promotional-offer",
+    "05-product-launch",
+    "06-event-webinar",
+    "07-abandoned-cart",
+    "08-browse-abandonment",
+    "09-post-purchase-customer-success",
+    "10-review-feedback-survey",
+    "11-cross-sell-upsell",
+    "12-replenishment-renewal",
+    "13-winback-reengagement-sunset",
+    "14-transactional-service",
+    "15-b2b-outbound-prospecting",
+    "16-inventory-price-alert",
+    "17-loyalty-vip-referral"
+  ],
+  "source_count": 65
+}
