@@ -7,7 +7,7 @@ last_reviewed: 2026-07-15
 
 # Browse Abandonment
 
-Use this skill only after applying `../../GLOBAL_GUARDRAILS.md`.
+Use this skill only after applying the `00-email-marketing-guardrails` skill (`../00-email-marketing-guardrails/SKILL.md`).
 
 ## What and why
 A browse-abandonment flow follows a product view without cart or checkout activity, so it must be lighter than cart recovery. [KL-BROWSE-01]

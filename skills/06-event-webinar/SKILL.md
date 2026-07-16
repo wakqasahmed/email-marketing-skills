@@ -7,7 +7,7 @@ last_reviewed: 2026-07-15
 
 # Event and Webinar Campaign
 
-Use this skill only after applying `../../GLOBAL_GUARDRAILS.md`.
+Use this skill only after applying the `00-email-marketing-guardrails` skill (`../00-email-marketing-guardrails/SKILL.md`).
 
 ## What and why
 An event campaign moves an eligible audience from invitation to registration, attendance, and a useful post-event next step. [MC-EVENT-01][HUB-EVENT-01]

@@ -7,7 +7,7 @@ last_reviewed: 2026-07-15
 
 # Transactional and Service Email
 
-Use this skill only after applying `../../GLOBAL_GUARDRAILS.md`.
+Use this skill only after applying the `00-email-marketing-guardrails` skill (`../00-email-marketing-guardrails/SKILL.md`).
 
 ## What and why
 A transactional email delivers essential information tied to a user action, purchase, account, security event, or service relationship rather than a marketing conversion. [BRAZE-TRANS-01][MC-PERM-01]

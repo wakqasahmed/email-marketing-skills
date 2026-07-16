@@ -7,7 +7,7 @@ last_reviewed: 2026-07-15
 
 # B2B Outbound Prospecting
 
-Use this skill only after applying `../../GLOBAL_GUARDRAILS.md`.
+Use this skill only after applying the `00-email-marketing-guardrails` skill (`../00-email-marketing-guardrails/SKILL.md`).
 
 ## What and why
 B2B outbound is direct commercial outreach to a business contact; it is not automatically permission-based and must pass jurisdiction-specific legal and platform checks before use. [ICO-03][FTC-01]

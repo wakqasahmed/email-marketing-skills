@@ -7,7 +7,7 @@ last_reviewed: 2026-07-15
 
 # Newsletter and Editorial Email
 
-Use this skill only after applying `../../GLOBAL_GUARDRAILS.md`.
+Use this skill only after applying the `00-email-marketing-guardrails` skill (`../00-email-marketing-guardrails/SKILL.md`).
 
 ## What and why
 A newsletter is a recurring permission-based editorial message used to maintain a useful relationship, share updates, and move readers toward a measurable next action. [MC-NEWS-01][MC-PERM-01]

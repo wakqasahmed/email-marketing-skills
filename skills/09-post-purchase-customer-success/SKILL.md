@@ -7,7 +7,7 @@ last_reviewed: 2026-07-15
 
 # Post-Purchase and Customer Success
 
-Use this skill only after applying `../../GLOBAL_GUARDRAILS.md`.
+Use this skill only after applying the `00-email-marketing-guardrails` skill (`../00-email-marketing-guardrails/SKILL.md`).
 
 ## What and why
 A post-purchase flow supports the customer after an order and can build loyalty, product success, reviews, and repeat purchase. [KL-POST-01]

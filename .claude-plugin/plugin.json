@@ -1,6 +1,7 @@
 {
   "name": "email-marketing-skills",
   "skills": [
+    "./skills/00-email-marketing-guardrails",
     "./skills/01-newsletter-editorial",
     "./skills/02-welcome-onboarding",
     "./skills/03-lead-nurture-education",

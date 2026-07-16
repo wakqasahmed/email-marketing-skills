@@ -7,7 +7,7 @@ last_reviewed: 2026-07-15
 
 # Abandoned Cart and Checkout Recovery
 
-Use this skill only after applying `../../GLOBAL_GUARDRAILS.md`.
+Use this skill only after applying the `00-email-marketing-guardrails` skill (`../00-email-marketing-guardrails/SKILL.md`).
 
 ## What and why
 An abandoned-cart flow reminds an identifiable shopper about a checkout they started but did not complete. [KL-CART-01]

@@ -7,7 +7,7 @@ last_reviewed: 2026-07-15
 
 # Loyalty, VIP, and Referral Campaign
 
-Use this skill only after applying `../../GLOBAL_GUARDRAILS.md`.
+Use this skill only after applying the `00-email-marketing-guardrails` skill (`../00-email-marketing-guardrails/SKILL.md`).
 
 ## What and why
 A loyalty/VIP campaign recognizes high-value customers, while a referral campaign asks satisfied customers to introduce qualified new customers. [KL-VIP-01][MC-REF-01]
