@@ -23,6 +23,19 @@ A replenishment flow reminds a customer near an observed repurchase point, while
 - Branch by product consumption cycle, plan, tenure, loyalty tier, payment state, or contract owner using verified data. [KL-REPLEN-01][KL-VIP-01]
 - Measure repeat purchase or renewal rate, retained revenue, churn, timing-to-renew, margin, support contacts, and complaints. [BRAZE-METRIC-01][MC-CONV-01]
 
+## Do / Don't quick reference
+**Do**
+- Derive replenishment timing from actual product and customer buying cycles. [KL-REPLEN-01]
+- Trigger renewals from the authoritative contract, membership, or expiry date. [MC-RENEW-01]
+- Use the published renewal baseline: 45–60 days out, 30 days, 7–10 days, and 1–3 days before expiry. [MC-RENEW-01]
+- State the plan, date, price, material terms, and consequences of action or inaction. [FTC-01][MC-RENEW-01]
+- Stop immediately after renewal, repurchase, cancellation, or opt-out. [HUB-WF-01]
+
+**Don't**
+- Don't use a generic interval in place of observed consumption cycles. [KL-REPLEN-01]
+- Don't mix billing or service notices with optional promotions. [BRAZE-TRANS-01]
+- Don't invent an expiry or deadline that the authoritative system does not show. [FTC-01]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.

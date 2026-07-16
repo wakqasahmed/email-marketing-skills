@@ -25,6 +25,20 @@ A promotional email presents a commercial offer and asks an eligible recipient t
 - Measure delivered revenue, conversion rate, profit or contribution margin, average order value, unsubscribe/complaint rate, and landing-page conversion. [MC-CONV-01][MC-GA-01][BRAZE-METRIC-01]
 - Test one variable such as offer framing, subject, CTA, content, or send time, and select the winner using the business outcome closest to revenue. [MC-AB-01][HUB-AB-01]
 
+## Do / Don't quick reference
+**Do**
+- State the offer, eligibility, material terms, price, and expiry accurately. [FTC-01]
+- Exclude recent purchasers when the offer would frustrate them. [MC-SEG-01][BRAZE-STRAT-01]
+- Match the primary CTA to the landing page and verify both. [LIT-QA-01][MC-GA-01]
+- Increase frequency and audience size gradually, especially around holidays. [BRAZE-HOLIDAY-01]
+- Measure delivered revenue, margin, and conversion, not clicks alone. [MC-CONV-01][BRAZE-METRIC-01]
+
+**Don't**
+- Don't fabricate scarcity, deadlines, or discounts. [FTC-01][MC-SUBJ-01]
+- Don't automatically resend to non-openers. [MC-RESEND-01][LIT-MPP-01]
+- Don't force a full unsubscribe when a preference or pause option would do. [BRAZE-HOLIDAY-01][BRAZE-STRAT-01]
+- Don't use a subject or preview that misrepresents the offer. [FTC-01][MC-SUBJ-01]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.

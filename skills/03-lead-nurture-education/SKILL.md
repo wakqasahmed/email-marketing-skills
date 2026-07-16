@@ -24,6 +24,20 @@ A nurture sequence uses triggers, segmentation, and progressively relevant conte
 - Personalize only from reliable CRM or behavioral fields and provide safe fallbacks for missing values. [LIT-QA-01][BRAZE-STRAT-01]
 - Measure qualified replies, MQL/SQL movement, meetings, opportunities, pipeline sourced/influenced, deal velocity, and conversions rather than opens alone. [HUB-B2B-01][LIT-MPP-01]
 
+## Do / Don't quick reference
+**Do**
+- Deliver the promised asset or answer immediately. [MC-FOLLOW-01][HUB-B2B-01]
+- Segment by role, industry, lifecycle stage, or declared need. [HUB-B2B-01][MC-SEG-01]
+- Give every email one job and one primary next step. [BRAZE-STRAT-01]
+- Route high-intent responses to the right sales or success owner. [HUB-AUTO-01][HUB-B2B-01]
+- Measure qualified replies, pipeline movement, and conversions. [HUB-B2B-01][MC-CONV-01]
+
+**Don't**
+- Don't run one generic sequence for materially different buyers. [HUB-B2B-01][MC-SEG-01]
+- Don't continue after the person converts, replies, or opts out. [MC-FOLLOW-01][HUB-WF-01]
+- Don't exceed a small number of value-adding follow-ups; two to five is the starting range to test. [MC-FOLLOW-01]
+- Don't personalize from unreliable fields or without safe fallbacks. [LIT-QA-01][BRAZE-STRAT-01]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.

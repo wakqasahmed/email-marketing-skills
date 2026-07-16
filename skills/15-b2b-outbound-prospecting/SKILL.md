@@ -24,6 +24,19 @@ B2B outbound is direct commercial outreach to a business contact; it is not auto
 - Include a clear opt-out and maintain a do-not-contact list even where corporate-email rules are less strict. [ICO-01][ICO-03][FTC-01]
 - Measure positive reply rate, meetings, qualified opportunities, pipeline sourced/influenced, deal velocity, opt-outs, complaints, and domain reputation. [HUB-B2B-01][GMAIL-03]
 
+## Do / Don't quick reference
+**Do**
+- Document the lawful basis, address source, purpose, and jurisdiction, distinguishing corporate subscribers from identifiable individuals. [ICO-03][ICO-04]
+- Segment narrowly and explain why the message is relevant to that recipient. [HUB-B2B-01]
+- Send from a real, clearly identified person or business with a working reply path. [FTC-01]
+- Include a clear opt-out and maintain a do-not-contact list everywhere. [ICO-01][ICO-03][FTC-01]
+
+**Don't**
+- Don't use bought, scraped, or unverifiable lists. [MC-LISTS-01][ICO-04]
+- Don't treat CAN-SPAM compliance as proof the outreach is lawful in every jurisdiction. [FTC-01][ICO-03]
+- Don't manufacture familiarity or use deceptive `Re:`/`Fwd:` framing. [FTC-01]
+- Don't continue follow-ups after a reply, objection, or opt-out. [MC-FOLLOW-01][ICO-03]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.

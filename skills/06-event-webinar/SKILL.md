@@ -25,6 +25,20 @@ An event campaign moves an eligible audience from invitation to registration, at
 - After the event, segment attendees and no-shows; send the recording or resources and one clear next-step CTA. [HUB-EVENT-01][ZOOM-EVENT-01]
 - Measure registration conversion, attendance/show rate, engagement, qualified follow-up actions, pipeline or revenue, unsubscribes, and complaints. [BRAZE-METRIC-01][HUB-B2B-01]
 
+## Do / Don't quick reference
+**Do**
+- State the audience value, topic, speaker, date, time zone, duration, format, and registration CTA in the invitation. [MC-EVENT-02]
+- Use a reminder baseline of about two weeks, one week, and one day before, then test. [MC-EVENT-01]
+- Offer both Google Calendar and ICS options. [HUB-CAL-01]
+- Include join logistics, access instructions, and troubleshooting in reminders. [MC-EVENT-01][MC-EVENT-02]
+- Segment attendees and no-shows for distinct follow-up with the recording and one next step. [HUB-EVENT-01][ZOOM-EVENT-01]
+
+**Don't**
+- Don't keep inviting people who already registered. [HUB-WF-01]
+- Don't add promotional follow-up to service confirmations without marketing permission. [BRAZE-TRANS-01][ICO-02]
+- Don't bury the join method or time-zone information. [MC-EVENT-01][MC-EVENT-02]
+- Don't send reminders after cancellation or ineligibility. [HUB-WF-01]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.

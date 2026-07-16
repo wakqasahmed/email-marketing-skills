@@ -49,6 +49,24 @@ Apply this file before every campaign-specific `SKILL.md`. A campaign that fails
 - Test rendering across major mobile, desktop, and webmail clients, with images off and in dark mode; check ALT text, contrast, and plain text. [LIT-QA-01][LIT-TEST-01]
 - Send seed/test messages and confirm authentication and delivery before enabling the full audience. [LIT-TEST-01][GMAIL-03]
 
+## Do / Don't digest
+**Do**
+- Authenticate every sending domain with SPF and DKIM, and aligned DMARC for bulk sending. [GMAIL-01][YAHOO-01]
+- Send only where permission or another documented lawful basis exists for this channel and purpose. [ICO-02][HUB-CONSENT-01][MC-PERM-01]
+- Keep the list clean: suppress bounces, complaints, and unsubscribes immediately, and sunset persistently unengaged contacts. [KL-SUNSET-01][KL-NEVER-01][GMAIL-01]
+- Make unsubscribing easy: a visible link plus one-click unsubscribe, honored within 48 hours. [GMAIL-01][YAHOO-01][MC-SPAM-01]
+- Personalize from reliable first-party data with safe fallbacks. [MC-SEG-01][LIT-QA-01]
+- Optimize for mobile: responsive layout, live text, and large tappable controls. [LIT-MOBILE-01][LIT-ACCESS-01]
+- Test before sending: major clients, images off, dark mode, plain text, and seed sends. [LIT-QA-01][LIT-TEST-01]
+
+**Don't**
+- Don't buy, rent, scrape, or harvest lists. [MC-LISTS-01][ICO-04]
+- Don't over-mail: respect frequency caps and preferences, and keep the Gmail spam rate below 0.1%, never at or above 0.3%. [GMAIL-02][BRAZE-HOLIDAY-01][BRAZE-STRAT-01]
+- Don't use clickbait: the subject and preview must truthfully represent the content. [FTC-01][MC-SUBJ-01]
+- Don't send without one clear primary call to action. [BRAZE-CTA-01][BRAZE-STRAT-01]
+- Don't judge success or trigger automation on opens alone. [LIT-MPP-01]
+- Don't disguise marketing as transactional or service mail. [BRAZE-TRANS-01][FTC-01]
+
 ## Decision rule
 - Return `BLOCK` when permission, legality, authentication, suppression, identity, or factual claims cannot be verified. [FTC-01][ICO-02][GMAIL-01]
 - Return `HOLD` when the campaign is lawful but data, tracking, QA, inventory, landing page, or approvals are incomplete. [LIT-QA-01][LIT-TEST-01]

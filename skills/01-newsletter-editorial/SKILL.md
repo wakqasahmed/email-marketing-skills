@@ -25,6 +25,21 @@ A newsletter is a recurring permission-based editorial message used to maintain 
 - Track link-level clicks, downstream conversions, unsubscribe/complaint rate, and content-module performance; treat opens only as a directional diagnostic. [MC-REPORT-01][MC-GA-01][LIT-MPP-01]
 - Test one element at a time, such as subject framing, content order, CTA wording, or send time. [MC-AB-01]
 
+## Do / Don't quick reference
+**Do**
+- Keep the topic and cadence promised at signup. [ICO-02][MC-PERM-01]
+- Give each issue one objective and one primary CTA. [BRAZE-STRAT-01][MC-NEWS-01]
+- Structure short, scannable sections with headings that read well on mobile. [MC-NEWS-02][LIT-MOBILE-01]
+- Segment by role, interest, lifecycle, or behavior so each version is useful. [MC-SEG-01][BRAZE-STRAT-01]
+- Choose send time from recipient data or a controlled test. [MC-TIME-01][MC-AB-01]
+
+**Don't**
+- Don't turn issues into an undifferentiated link dump. [MC-NEWS-01]
+- Don't route the newsletter through the transactional stream. [BRAZE-TRANS-01]
+- Don't change topic or frequency beyond what the subscriber agreed to. [ICO-02][MC-PERM-01]
+- Don't judge issue performance on opens alone. [LIT-MPP-01][MC-REPORT-01]
+- Don't use a clickbait or misleading subject line. [FTC-01][MC-SUBJ-01]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.

@@ -23,6 +23,18 @@ A cross-sell recommends a complementary product, while an upsell recommends a mo
 - Use one primary recommendation set and CTA, with accurate price, availability, and terms. [FTC-01][BRAZE-STRAT-01]
 - Measure attach rate, average order value, incremental revenue or margin, repeat purchase, returns, unsubscribes, and complaints. [MC-CONV-01][BRAZE-METRIC-01]
 
+## Do / Don't quick reference
+**Do**
+- Base recommendations on placed or fulfilled orders or genuine high-intent behavior. [KL-XSELL-01]
+- Wait until the customer likely has the original order; 14 days after fulfillment is a testable baseline. [KL-XSELL-01]
+- Explain the relationship between the original item and the recommendation. [KL-XSELL-01]
+- Show accurate price, availability, and terms with one primary CTA. [FTC-01][BRAZE-STRAT-01]
+
+**Don't**
+- Don't show an arbitrary bestseller grid as a recommendation. [KL-XSELL-01]
+- Don't recommend already purchased, unavailable, incompatible, or recently returned items. [KL-XSELL-01][FTC-01]
+- Don't stack several competing offers and CTAs in one message. [BRAZE-CTA-01][BRAZE-STRAT-01]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.

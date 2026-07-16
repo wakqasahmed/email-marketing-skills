@@ -24,6 +24,19 @@ An abandoned-cart flow reminds an identifiable shopper about a checkout they sta
 - Exit immediately on purchase, opt-out, complaint, invalid inventory, or cart expiry. [HUB-WF-01][GMAIL-01]
 - Measure recovered orders, recovered revenue, conversion after send/click, margin after incentives, complaint/unsubscribe rate, and overlap with other flows. [MC-CONV-01][BRAZE-METRIC-01]
 
+## Do / Don't quick reference
+**Do**
+- Trigger from checkout-started or equivalent high-intent behavior. [KL-CART-01]
+- Use the 2–4 hour first-reminder and 20–48 hour second-reminder baseline, then test. [KL-CART-01]
+- Show the exact cart items, quantities, prices, and a working return-to-cart link. [KL-CART-01]
+- Exit immediately on purchase, opt-out, complaint, or invalid inventory. [HUB-WF-01][GMAIL-01]
+
+**Don't**
+- Don't invent a discount, stock threat, or expiry to force urgency. [FTC-01]
+- Don't trigger cart recovery from a mere page view. [KL-CART-01][KL-BROWSE-01]
+- Don't send promotional reminders without marketing permission. [ICO-02]
+- Don't let cart messages collide with browse, welcome, or promotional flows unchecked. [BRAZE-STRAT-01][HUB-WF-01]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.
