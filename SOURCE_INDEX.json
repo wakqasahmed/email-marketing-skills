@@ -311,6 +311,12 @@
     "url": "https://help.klaviyo.com/hc/en-us/articles/360035312491",
     "supports": "Use sampled/control segments to validate campaign impact."
   },
+  "KL-HOLDOUT-01": {
+    "publisher": "Klaviyo Help Center",
+    "title": "Getting started with global holdout groups",
+    "url": "https://help.klaviyo.com/hc/en-us/articles/18138290642971",
+    "supports": "Global holdouts exclude profiles across campaign and flow channels for a defined test window, retain membership history, and allow essential transactional messages."
+  },
   "HUB-WF-01": {
     "publisher": "HubSpot Knowledge Base",
     "title": "Create workflows",
