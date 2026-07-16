@@ -19,7 +19,7 @@ Plan a welcome series for new subscribers. Include the campaign map, test design
 ```
 
 ## Scope
-The taxonomy covers recurring editorial mail, welcome/onboarding, lead nurture, promotions, launches, events, ecommerce behavioral flows, post-purchase/customer success, reviews, cross-sell, replenishment/renewal, winback/sunset, transactional mail, B2B outbound, inventory/price alerts, loyalty/referrals, jurisdiction routing, lifecycle orchestration, and permission-first list growth.
+The taxonomy covers recurring editorial mail, welcome/onboarding, lead nurture, promotions, launches, events, ecommerce behavioral flows, post-purchase/customer success, reviews, cross-sell, replenishment/renewal, winback/sunset, transactional mail, B2B outbound, inventory/price alerts, loyalty/referrals, jurisdiction routing, lifecycle orchestration, permission-first list growth, and deliverability/sender operations.
 
 These are composable archetypes rather than a claim that every company uses the same labels. A birthday message, for example, normally combines the promotional skill with lifecycle/date-trigger logic; a trial-expiry message combines onboarding, renewal, and transactional classification.
 
@@ -64,6 +64,7 @@ These are composable archetypes rather than a claim that every company uses the 
 - `18-jurisdiction-compliance-routing`: sender and recipient jurisdiction facts and operational routing before drafting for US, UK, EEA, Canadian, or unresolved groups.
 - `19-lifecycle-orchestration`: contact-level collision and frequency governance across flows.
 - `20-list-growth-signup-preferences`: first-party signup consent, double opt-in, preferences, lead magnets, and confirmed welcome handoff.
+- `21-deliverability-sender-operations`: sender-authentication preflight, list hygiene, bounce/complaint/suppression handling, reputation monitoring and recovery, warm-up/ramp, and traffic separation.
 
 ## Files
 - `skills/00-email-marketing-guardrails/SKILL.md`: hard gates for all campaigns (`GLOBAL_GUARDRAILS.md` remains as a pointer).
