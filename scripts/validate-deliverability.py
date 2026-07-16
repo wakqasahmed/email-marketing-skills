@@ -68,6 +68,83 @@ contradictions = {
 }
 
 
+# Paraphrase-resistant gates: each looks for a policy-relevant noun
+# (authentication, complaint/suppression, IP/domain reputation) co-occurring
+# with a permissive/bypass signal in the same sentence, backing off when a
+# direct negation of that signal is present. This catches rewordings the
+# literal `contradictions` regexes above miss, because it keys on the intent
+# being expressed rather than one exact phrasing.
+
+_AUTH_TERM = re.compile(r"\b(spf|dkim|dmarc)\b")
+_AUTH_BYPASS = re.compile(
+    r"\bskip(?:s|ping|ped)?\b|\bbypass(?:es|ed|ing)?\b|\bexempt\w*\b|\bwaive[sd]?\b|"
+    r"\b(?:don'?t|doesn'?t) need to\b|\bno longer needs?\b|\bnot required for\b|"
+    r"\b(?:aren'?t|isn'?t|is not|are not|not) (?:really |strictly )?necessary\b|"
+    r"\boptional for\b"
+)
+_AUTH_BYPASS_NEGATED = re.compile(
+    r"\b(never|do not|don't|does not|doesn't|must not|cannot|can't|shall not)\s+"
+    r"(skip|bypass(?:es|ing)?|exempt\w*|waive[sd]?)\b"
+)
+
+_COMPLAINT_TERM = re.compile(r"\bcomplain(?:t|ts|ed|ing)?\b")
+_SUPPRESS_TERM = re.compile(r"\bsuppress\w*\b|\bunsubscribe\w*\b")
+_SUPPRESSION_DELAY = re.compile(
+    r"\bgrace period\b|\bgrace window\b|\bonly after\b.{0,20}\bdays?\b|\bwait until\b|"
+    r"\bdelay(?:ed|ing)? suppression\b|\b\d+[- ]day grace\b|\bno rush\b|"
+    r"\bcouple (?:of )?weeks?\b|\bfew weeks\b|\btake (?:your|the) time\b|\bnot urgent\b|"
+    r"\bwhen convenient\b|\beventually\b"
+)
+
+_REPUTATION_TERM = re.compile(r"\breputation\b")
+_IP_OR_DOMAIN_TERM = re.compile(r"\bip\b|\bdomain\b")
+_REPUTATION_INHERIT = re.compile(
+    r"\binherit\w*\b|\btransfer\w*\b|\breuse\w*\b|\bcarry over\b|\bborrow\w*\b|"
+    r"\bshares? the reputation\b|\btake on\b|\badopt\w*\b|\bassume\w*\b"
+)
+
+
+def _normalize(text: str) -> str:
+    return re.sub(r"[`*_]", "", text.lower())
+
+
+def _sentences(text: str) -> list[str]:
+    normalized = _normalize(text)
+    return [s.strip() for s in re.split(r"(?<=[.!?;])\s+|\n+", normalized) if s.strip()]
+
+
+def _gate(text: str, any_of=(), safe=()) -> bool:
+    for sentence in _sentences(text):
+        if any(p.search(sentence) for p in safe):
+            continue
+        if any_of and not all(any(p.search(sentence) for p in group) for group in any_of):
+            continue
+        return True
+    return False
+
+
+paraphrase_gates = {
+    # Closes: exempting some senders from SPF/DKIM/DMARC checks, e.g.
+    # "Trusted senders may skip SPF, DKIM, and DMARC alignment checks
+    # entirely" — any auth term paired with a skip/bypass/exempt/waive
+    # signal, unless directly negated ("never skip DKIM").
+    "auth-check-bypass": lambda t: _gate(
+        t, any_of=[[_AUTH_TERM], [_AUTH_BYPASS]], safe=[_AUTH_BYPASS_NEGATED]
+    ),
+    # Closes: delaying complaint suppression past the required window, e.g.
+    # "Suppress complaints only after a 30-day grace window".
+    "suppression-grace-period": lambda t: _gate(
+        t, any_of=[[_COMPLAINT_TERM], [_SUPPRESS_TERM], [_SUPPRESSION_DELAY]]
+    ),
+    # Closes: a new IP/domain inheriting another address's warmed-up
+    # reputation to skip warm-up, e.g. "A brand-new IP can inherit a
+    # warmed-up IP reputation and send at full volume day one".
+    "reputation-inheritance": lambda t: _gate(
+        t, any_of=[[_REPUTATION_TERM], [_IP_OR_DOMAIN_TERM], [_REPUTATION_INHERIT]]
+    ),
+}
+
+
 def sections(text: str) -> dict[str, str]:
     result: dict[str, list[str]] = {}
     current = ""
@@ -109,6 +186,9 @@ def validate(text: str) -> list[str]:
     for label, pattern in contradictions.items():
         if pattern.search(text):
             errors.append(f"contradiction: {label}")
+    for label, gate in paraphrase_gates.items():
+        if gate(text):
+            errors.append(f"contradiction: {label}")
     return errors
 
 
@@ -129,6 +209,26 @@ fixtures = {
     "immediate-resume contradiction": ("", "\nAlways resume full volume immediately after reputation recovery."),
     "skip-auth contradiction": ("", "\nBulk sending is fine without SPF, DKIM, or DMARC."),
     "suppression-optional contradiction": ("", "\nSuppression sync is optional for marketing sends."),
+    "paraphrased auth bypass": (
+        "",
+        "\nTrusted senders with a long sending history may skip SPF, DKIM, and DMARC alignment checks entirely.",
+    ),
+    "paraphrased suppression delay": (
+        "",
+        "\nSuppress complaints only after a 30-day grace window.",
+    ),
+    "paraphrased reputation inheritance": (
+        "",
+        "\nA brand-new IP can inherit a warmed-up IP's reputation and send at full volume day one.",
+    ),
+    "novel auth bypass paraphrase": (
+        "",
+        "\nSenders with a strong sending history don't need to maintain DKIM signing going forward.",
+    ),
+    "novel suppression delay paraphrase": (
+        "",
+        "\nComplaint suppression can wait until the end of the billing cycle.",
+    ),
 }
 for label, (deleted_text, appended_text) in fixtures.items():
     mutated = text.replace(deleted_text, "", 1) + appended_text

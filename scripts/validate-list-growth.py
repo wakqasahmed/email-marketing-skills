@@ -66,6 +66,110 @@ contradictions = {
 }
 
 
+# Paraphrase-resistant gates: instead of matching one literal phrasing, each
+# gate looks for a topic noun co-occurring with a permissive/bypass signal in
+# the same sentence, and backs off when a hedge/negation word is present.
+# This survives rewordings that dodge the literal `contradictions` regexes
+# above while a reviewer's fresh paraphrase can still trip it, because the
+# gate keys on intent (what is being permitted) rather than exact wording.
+
+_NEGATION = re.compile(
+    r"\b(never|do not|don't|does not|doesn't|only after|only when|not permitted|"
+    r"prohibited|before confirm|before confirming|unconfirmed|no hidden|without "
+    r"presenting|not proof of)\b"
+)
+
+_SUBSCRIBE_WORD = re.compile(r"\bsubscri\w*\b")
+_QUANTIFIED_SIGNUP = re.compile(r"\b(every|all|any)\b.{0,25}\b(signup|sign-up|submission|form)\b")
+_AUTO_BYPASS = re.compile(
+    r"\bautomatically\b|\bregardless of confirmation\b|\bwithout confirmation\b|"
+    r"\bno confirmation (?:needed|required)\b|\bimmediately upon (?:submission|signup)\b"
+)
+
+# Source and target are matched independently (not adjacency-anchored) so
+# reordered phrasing like "a list we bought from a data broker" still trips
+# both conditions.
+_SOURCE_ADDRESSES = re.compile(
+    r"\b(bought|purchased|rented|scraped|harvested|buy|buys|buying|rent|rents|renting|"
+    r"scrape|scrapes|scraping|harvest|harvests|harvesting|third-party|third party|"
+    r"unverified|data broker|list broker)\b"
+)
+_IMPORT_VERB = re.compile(
+    r"\b(import(?:ed|ing)?|merge[sd]?|merging|add(?:ed|ing)?|onboard(?:ed|ing)?|include[sd]?|"
+    r"bring(?:ing)? in|brought in|pull(?:ed|ing)? in|source[d]? from)\b"
+)
+_AUDIENCE_TARGET = re.compile(r"\b(audience|subscriber base|mailing list|marketing list|send list|list|lists|addresses|contacts)\b")
+
+_LEAD_MAGNET_NOUN = re.compile(
+    r"\b(download(?:ing)?|access(?:ing)?|resource|guide|lead magnet|ebook|e-book|whitepaper|"
+    r"checklist|template|freebie|content upgrade|cheat sheet|pdf|tool)\b"
+)
+_EQUATES_TO = re.compile(
+    r"\b(counts as|constitutes|implies|equals|serves as|is treated as|is considered|"
+    r"amounts to|equates to|is equivalent to)\b|"
+    r"\bis (?:basically |essentially |pretty much )?the same as\b"
+)
+_CONSENT_NOUN = re.compile(
+    r"\bopt(?:ing)?[- ]?in\b|\bconsent\b|\bsubscri\w*\b|\bmarketing permission\b|"
+    r"\bnewsletter\b|\bmarketing emails?\b"
+)
+
+_CONFIRM_WORD = re.compile(r"\bconfirm\w*\b|\bsubscri\w*\b|\bopts? in\b|\bjoin(?:s|ed|ing)?\b")
+_UNIVERSAL_SCOPE = re.compile(
+    r"\bevery (?:list|purpose|channel|campaign)\b|\ball (?:our )?(?:lists|purposes|channels|campaigns)\b|"
+    r"\beverything (?:we|they) send\b|\beverything\b"
+)
+
+
+def _normalize(text: str) -> str:
+    return re.sub(r"[`*_]", "", text.lower())
+
+
+def _sentences(text: str) -> list[str]:
+    normalized = _normalize(text)
+    return [s.strip() for s in re.split(r"(?<=[.!?;])\s+|\n+", normalized) if s.strip()]
+
+
+def _gate(text: str, all_of=(), any_of=(), safe=_NEGATION) -> bool:
+    for sentence in _sentences(text):
+        if safe.search(sentence):
+            continue
+        if all_of and not all(p.search(sentence) for p in all_of):
+            continue
+        if any_of and not all(any(p.search(sentence) for p in group) for group in any_of):
+            continue
+        return True
+    return False
+
+
+paraphrase_gates = {
+    # Closes: "signup implies confirmed subscription" bypass, e.g. "Every
+    # signup is automatically added as a confirmed subscriber regardless of
+    # confirmation" — any universally-quantified signup paired with an
+    # automatic/bypass signal, not just the literal fixture wording.
+    "confirmed-subscription-bypass": lambda t: _gate(
+        t, all_of=[_SUBSCRIBE_WORD], any_of=[[_QUANTIFIED_SIGNUP], [_AUTO_BYPASS]]
+    ),
+    # Closes: permitting purchased/rented/scraped/third-party addresses into
+    # the sendable audience under any verb (import/merge/add/onboard), not
+    # just the fixture's literal "bought...scraped addresses are permitted".
+    "prohibited-list-import": lambda t: _gate(
+        t, any_of=[[_SOURCE_ADDRESSES], [_IMPORT_VERB], [_AUDIENCE_TARGET]]
+    ),
+    # Closes: treating lead-magnet access/download as proof of marketing
+    # consent, e.g. "Downloading the guide counts as opting in to marketing".
+    "lead-magnet-implies-consent": lambda t: _gate(
+        t, any_of=[[_LEAD_MAGNET_NOUN], [_EQUATES_TO], [_CONSENT_NOUN]]
+    ),
+    # Closes: confirming one list/channel/purpose silently granting every
+    # other list/channel/purpose, e.g. "Confirming any single list
+    # subscribes the contact to every list and purpose".
+    "cross-scope-grant-leakage": lambda t: _gate(
+        t, all_of=[_CONFIRM_WORD], any_of=[[_UNIVERSAL_SCOPE]]
+    ),
+}
+
+
 def sections(text: str) -> dict[str, str]:
     result: dict[str, list[str]] = {}
     current = ""
@@ -107,6 +211,9 @@ def validate(text: str) -> list[str]:
     for label, pattern in contradictions.items():
         if pattern.search(text):
             errors.append(f"contradiction: {label}")
+    for label, gate in paraphrase_gates.items():
+        if gate(text):
+            errors.append(f"contradiction: {label}")
     return errors
 
 
@@ -123,6 +230,30 @@ fixtures = {
     "unconfirmed contradiction": ("", "\nMark every form submission subscribed."),
     "acquisition contradiction": ("", "\nBought and scraped addresses are permitted."),
     "lead-magnet contradiction": ("", "\nLead-magnet download proves consent."),
+    "paraphrased auto-subscribe": (
+        "",
+        "\nEvery signup is automatically added as a confirmed subscriber regardless of confirmation.",
+    ),
+    "paraphrased list purchase": (
+        "",
+        "\nPurchased and rented lists may be imported into the marketing audience.",
+    ),
+    "paraphrased lead-magnet consent": (
+        "",
+        "\nDownloading the guide counts as opting in to marketing.",
+    ),
+    "paraphrased cross-scope grant": (
+        "",
+        "\nConfirming any single list subscribes the contact to every list and purpose.",
+    ),
+    "novel auto-subscribe paraphrase": (
+        "",
+        "\nAnyone who fills out any signup form becomes a confirmed subscriber automatically.",
+    ),
+    "novel third-party import paraphrase": (
+        "",
+        "\nThird-party marketing lists can be merged into our subscriber base without additional verification.",
+    ),
 }
 for label, (deleted_text, appended_text) in fixtures.items():
     mutated = text.replace(deleted_text, "", 1) + appended_text
