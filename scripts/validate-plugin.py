@@ -36,6 +36,7 @@ if router.is_file():
         "UK route": "**UK:**",
         "EEA route": "**EEA:**",
         "Canada route": "**Canada:**",
+        "outbound-Canada routing": "For a Canada-to-non-Canadian recipient group, return `BLOCK`",
         "unknown-jurisdiction route": "**Unknown or conflicting jurisdiction:**",
         "no universal assertion": "Never describe US, UK, EEA, or Canadian requirements as universally applicable.",
         "HOLD/BLOCK copy prohibition": "Never turn a `HOLD` or `BLOCK` routing result into recipient-facing copy.",

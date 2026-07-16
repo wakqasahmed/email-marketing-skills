@@ -12,7 +12,7 @@ Apply these gates before every campaign-specific `SKILL.md`. A campaign that fai
 ## 1. Classification and permission gate
 - Classify each message as marketing/promotional, transactional/service, or mixed based on its primary purpose; do not disguise marketing as a service message. [BRAZE-TRANS-01][FTC-01]
 - Record the address source, signup statement, permitted channels/purposes, timestamp where available, jurisdiction, and current suppression status. [ICO-02][ICO-04][HUB-CONSENT-01]
-- Before drafting recipient-facing content, apply `18-jurisdiction-compliance-routing` when recipients include the US, UK, EEA, Canada, or an unknown/conflicting jurisdiction; unresolved routing is `HOLD` or `BLOCK`, not send-ready copy. [FTC-01][ICO-01][EU-EC-01][CRTC-CASL-01]
+- Before drafting recipient-facing content, apply `18-jurisdiction-compliance-routing` when a recipient is in the US, UK, EEA, or Canada; the sender or sending system is in Canada; or a jurisdiction is unknown or conflicting. Unresolved routing is `HOLD` or `BLOCK`, not send-ready copy. [FTC-01][ICO-01][EU-EC-01][CRTC-CASL-01]
 - For marketing, require a valid permission or other documented lawful basis applicable to the recipient and jurisdiction; a provided email address is not automatically consent for every marketing purpose. [ICO-01][ICO-02][ICO-03]
 - Never use bought, scraped, harvested, or unverifiable lists. [MC-LISTS-01][ICO-04]
 - Keep email, SMS, push, and other channel consent separate. [ICO-02]

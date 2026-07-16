@@ -32,7 +32,7 @@ These are composable archetypes rather than a claim that every company uses the 
 
 ## How an agent should use the pack
 1. Load the `00-email-marketing-guardrails` skill.
-2. Apply `18-jurisdiction-compliance-routing` before drafting when recipients include the US, UK, EEA, Canada, or an unknown/conflicting jurisdiction.
+2. Apply `18-jurisdiction-compliance-routing` before drafting when a recipient is in the US, UK, EEA, or Canada; the sender or sending system is in Canada; or a jurisdiction is unknown or conflicting.
 3. Select the closest campaign-specific `SKILL.md`.
 4. Combine multiple skills only when the message genuinely spans campaign types.
 5. Collect missing inputs; never fabricate them.
@@ -59,7 +59,7 @@ These are composable archetypes rather than a claim that every company uses the 
 - `15-b2b-outbound-prospecting`: lawful, low-volume B2B outreach.
 - `16-inventory-price-alert`: back-in-stock, low-inventory, and price alerts.
 - `17-loyalty-vip-referral`: VIP, loyalty, and referral campaigns.
-- `18-jurisdiction-compliance-routing`: jurisdiction facts and operational routing before drafting for US, UK, EEA, Canadian, or unresolved recipient groups.
+- `18-jurisdiction-compliance-routing`: sender and recipient jurisdiction facts and operational routing before drafting for US, UK, EEA, Canadian, or unresolved groups.
 
 ## Files
 - `skills/00-email-marketing-guardrails/SKILL.md`: hard gates for all campaigns (`GLOBAL_GUARDRAILS.md` remains as a pointer).
