@@ -18,4 +18,13 @@ for skill in skills:
     if name_line != f"name: {path.name}":
         raise SystemExit(f"Skill name does not match its directory: {path}")
 
+guardrail_ref = "../00-email-marketing-guardrails/SKILL.md"
+missing_ref = [
+    skill for skill in skills
+    if Path(skill).name != "00-email-marketing-guardrails"
+    and guardrail_ref not in (root / skill / "SKILL.md").read_text()
+]
+if missing_ref:
+    raise SystemExit("Campaign skills missing the guardrails dependency: " + ", ".join(missing_ref))
+
 print(f"validated {len(skills)} plugin skill paths")
