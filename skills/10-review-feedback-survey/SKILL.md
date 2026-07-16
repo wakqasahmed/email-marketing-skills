@@ -23,6 +23,20 @@ A review or feedback email asks a customer to evaluate a completed experience so
 - Route poor experiences or urgent comments to support with consent-aware follow-up, and request separate permission before republishing identifiable testimonials. [ICO-02][FTC-01]
 - Measure response rate, completion rate, review publication, issue-resolution rate, sentiment/category trends, and downstream retention; do not optimize to positive ratings alone. [BRAZE-METRIC-01]
 
+## Do / Don't quick reference
+**Do**
+- Trigger only after delivery, completion, or enough usage to form a real opinion. [KL-POST-01][HUB-EVENT-01]
+- Say how long the request takes and use one direct review or survey CTA. [BRAZE-STRAT-01]
+- Personalize from the actual order, service, event, or support case. [LIT-QA-01]
+- Route poor experiences to support with consent-aware follow-up. [ICO-02][FTC-01]
+- Get separate permission before republishing identifiable testimonials. [ICO-02][FTC-01]
+
+**Don't**
+- Don't condition a reward on a positive rating. [KL-POST-01][FTC-01]
+- Don't suppress or filter out legitimate negative feedback. [KL-POST-01][FTC-01]
+- Don't send with unverified dynamic order or case fields. [LIT-QA-01]
+- Don't optimize the program to positive ratings alone. [BRAZE-METRIC-01]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.

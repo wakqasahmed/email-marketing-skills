@@ -23,6 +23,18 @@ A post-purchase flow supports the customer after an order and can build loyalty,
 - Suppress product recommendations already purchased or incompatible with the order. [KL-XSELL-01]
 - Measure support deflection, activation/usage, review completion, repeat purchase, time to second order, revenue, refund/return rate, and complaints. [BRAZE-METRIC-01][MC-CONV-01]
 
+## Do / Don't quick reference
+**Do**
+- Branch by first-time vs repeat buyer, product, order value, and delivery state. [KL-POST-01][KL-VIP-01]
+- Time each message to the fulfillment, delivery, or usage event it depends on. [KL-POST-01][KL-XSELL-01]
+- Keep receipts, shipping, and account notices in the transactional stream. [BRAZE-TRANS-01][MC-PERM-01]
+- Measure repeat purchase, time to second order, and support deflection. [BRAZE-METRIC-01][MC-CONV-01]
+
+**Don't**
+- Don't request a review or cross-sell before the customer has received and used the product. [KL-XSELL-01][KL-POST-01]
+- Don't recommend products already purchased or incompatible with the order. [KL-XSELL-01]
+- Don't blend promotions into essential service messages. [BRAZE-TRANS-01][FTC-01]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.

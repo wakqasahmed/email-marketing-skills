@@ -23,6 +23,18 @@ These alerts notify a shopper when a requested item returns, a relevant item rea
 - Avoid repeated alerts when inventory may disappear quickly; one timely message is safer than an uncontrolled sequence. [KL-LOWSTOCK-01]
 - Measure click-to-product, conversion, revenue/margin, time-to-purchase, out-of-stock clicks, unsubscribes, and complaints. [MC-GA-01][MC-CONV-01]
 
+## Do / Don't quick reference
+**Do**
+- Send back-in-stock alerts only to people who explicitly requested them for that item. [KL-STOCK-01]
+- Send promptly after the verified inventory or price event. [KL-LOWSTOCK-01]
+- Show the exact product variant, current price, and availability state. [KL-PRICE-01][FTC-01]
+- Suppress recipients who purchased or no longer meet the trigger conditions. [KL-LOWSTOCK-01][KL-PRICE-01]
+
+**Don't**
+- Don't imply a false sellout, threshold, or discount. [FTC-01]
+- Don't send repeated alerts when inventory may disappear quickly; one timely message is safer. [KL-LOWSTOCK-01]
+- Don't alert from stale or unverified catalog data. [KL-LOWSTOCK-01][KL-PRICE-01]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.

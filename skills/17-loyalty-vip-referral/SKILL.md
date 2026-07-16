@@ -23,6 +23,19 @@ A loyalty/VIP campaign recognizes high-value customers, while a referral campaig
 - Use trackable referral codes or links and monitor which sources create real sales and valuable repeat customers. [MC-REF-02]
 - Measure referral participation, referred conversion, cost per acquired customer, referred-customer value/retention, VIP repeat purchase, incremental margin, fraud, opt-outs, and complaints. [MC-REF-02][BRAZE-METRIC-01]
 
+## Do / Don't quick reference
+**Do**
+- Define VIP status from verified recency, frequency, spend, tenure, or tier, and update it dynamically. [KL-VIP-01][BRAZE-STRAT-01]
+- Recognize VIPs with early access, exclusive content, or personalized value rather than more volume. [KL-VIP-01]
+- State referral eligibility, incentive, attribution, expiry, limits, and fraud rules for both parties. [FTC-01][MC-REF-01]
+- Use trackable referral codes and measure real sales and repeat-customer value. [MC-REF-02]
+
+**Don't**
+- Don't ask for a referral before the customer has received value. [MC-REF-01][KL-POST-01]
+- Don't treat increased email volume as a loyalty reward. [KL-VIP-01]
+- Don't hide incentive expiry, limits, or eligibility conditions. [FTC-01][MC-REF-01]
+- Don't run referral incentives without fraud and abuse monitoring. [MC-REF-01][MC-REF-02]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.

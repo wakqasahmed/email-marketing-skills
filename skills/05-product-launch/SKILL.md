@@ -24,6 +24,19 @@ A launch campaign coordinates a sequence of messages that explains what is new, 
 - Measure activation/adoption, trials, demos, upgrades, purchases, pipeline, revenue, support contacts, complaints, and retention after adoption. [BRAZE-METRIC-01][HUB-B2B-01]
 - Test positioning, proof format, CTA, and sequence timing one variable at a time. [MC-AB-01][HUB-AB-01]
 
+## Do / Don't quick reference
+**Do**
+- Verify product, pricing, availability, support readiness, and claims before scheduling. [FTC-01][LIT-QA-01]
+- Lead with the recipient problem and outcome, then differentiator and proof. [HUB-LAUNCH-01]
+- Separate customers, prospects, waitlist, partners, and incompatible users. [MC-SEG-01][BRAZE-STRAT-01]
+- Keep every claim traceable to approved documentation or verified evidence. [FTC-01]
+
+**Don't**
+- Don't send a final reminder unless a real deadline or availability constraint exists. [HUB-LAUNCH-01][FTC-01]
+- Don't announce to users for whom the product is unavailable or irrelevant. [MC-SEG-01][HUB-WF-01]
+- Don't invent proof, benchmarks, or performance claims. [FTC-01]
+- Don't test several launch variables at once. [MC-AB-01][HUB-AB-01]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.

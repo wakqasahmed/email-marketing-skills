@@ -23,6 +23,19 @@ A transactional email delivers essential information tied to a user action, purc
 - Validate all dynamic data, prevent raw merge-tag exposure, and test links and rendering before deployment. [LIT-QA-01][LIT-TEST-01]
 - Monitor delivery success, latency, bounces, authentication, support contacts, completion of the required action, and failure/retry paths. [GMAIL-03][MC-REPORT-01][AWS-SES-MON-01]
 
+## Do / Don't quick reference
+**Do**
+- Trigger immediately from the authoritative system event, only to the affected recipient. [BRAZE-TRIG-01][BRAZE-TRANS-01]
+- Put the essential fact and required action first. [BRAZE-TRANS-01]
+- Separate transactional and marketing traffic for independent reputation where infrastructure permits. [BRAZE-TRANS-01][AWS-SES-SEP-01]
+- Monitor delivery success, latency, bounces, and authentication continuously. [GMAIL-03][AWS-SES-MON-01]
+
+**Don't**
+- Don't disguise marketing as a receipt, security alert, or reply. [FTC-01]
+- Don't add commercial content that changes the primary purpose without applying marketing consent and opt-out rules. [BRAZE-TRANS-01][FTC-01]
+- Don't ship unvalidated dynamic data or raw merge tags. [LIT-QA-01]
+- Don't queue essential messages behind marketing volume. [BRAZE-TRANS-01][AWS-SES-SEP-01]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.

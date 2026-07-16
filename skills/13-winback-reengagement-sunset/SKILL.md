@@ -23,6 +23,19 @@ A winback flow targets past customers after a meaningful lapse; a sunset flow ma
 - Suppress contacts who do not engage after the final attempt, and immediately suppress unsubscribes, complaints, and hard bounces. [KL-SUNSET-01][KL-NEVER-01][GMAIL-01]
 - Measure reactivation, purchase, retained revenue, preference updates, suppression volume, complaint rate, and later retention. [BRAZE-METRIC-01][MC-CONV-01]
 
+## Do / Don't quick reference
+**Do**
+- Define inactivity from the expected purchase or engagement cycle. [KL-WINBACK-01][BRAZE-STRAT-01]
+- Classify engagement from clicks, purchases, activity, or replies. [LIT-MPP-01][KL-NEVER-01]
+- Personalize from the verified prior relationship and offer preference options. [KL-WINBACK-01]
+- Make one deliberate final permission/value check, then suppress non-responders. [KL-SUNSET-01][KL-NEVER-01]
+
+**Don't**
+- Don't pretend the recipient was recently active. [KL-WINBACK-01][FTC-01]
+- Don't default to a discount; test incentives only when economics support them. [MC-AB-01][MC-CONV-01]
+- Don't keep mailing contacts who ignored the final attempt. [KL-SUNSET-01][KL-NEVER-01]
+- Don't use a universal day-count as the inactivity definition. [KL-WINBACK-01][BRAZE-STRAT-01]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.

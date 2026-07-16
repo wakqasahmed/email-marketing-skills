@@ -23,6 +23,19 @@ A browse-abandonment flow follows a product view without cart or checkout activi
 - Apply frequency controls so browse messages do not collide with welcome, cart, launch, or promotional sends. [BRAZE-STRAT-01][HUB-WF-01]
 - Measure product revisits, add-to-cart rate, checkout starts, purchases, revenue, unsubscribes, and complaints. [MC-GA-01][MC-CONV-01]
 
+## Do / Don't quick reference
+**Do**
+- Keep the touch lighter than cart recovery. [KL-BROWSE-01]
+- Frame the message as a helpful reminder or discovery aid. [KL-BROWSE-01]
+- Apply the baseline protections: no purchases, checkout starts, or add-to-cart events since entry, and no re-entry within 30 days. [KL-BROWSE-01]
+- Apply frequency controls against welcome, cart, launch, and promotional sends. [BRAZE-STRAT-01][HUB-WF-01]
+
+**Don't**
+- Don't claim the person "forgot" a cart they never created. [KL-BROWSE-01]
+- Don't send unless tracking lawfully identifies the visitor and they are eligible for marketing. [KL-BROWSE-01][ICO-02]
+- Don't recommend alternatives from unreliable catalog data. [KL-BROWSE-01][BRAZE-STRAT-01]
+- Don't re-enter recent recipients into the same flow. [KL-BROWSE-01]
+
 ## Mandatory output
 Return all of the following:
 1. Campaign objective and one primary business KPI.
