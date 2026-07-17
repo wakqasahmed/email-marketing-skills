@@ -100,6 +100,12 @@ _IMPORT_VERB = re.compile(
     r"bring(?:ing)? in|brought in|pull(?:ed|ing)? in|fold(?:ed|ing)? into|source[d]? from)\b"
 )
 _AUDIENCE_TARGET = re.compile(r"\b(audience|subscriber base|mailing list|marketing list|send list|list|lists|addresses|contacts)\b")
+_IMPORT_NEGATED = re.compile(
+    r"\b(never|do not|don't|does not|doesn't|must not|cannot|can't|shall not)\s+"
+    r"(?:\w+\s+){0,3}(import(?:ed|ing)?|merge[sd]?|merging|add(?:ed|ing)?|"
+    r"onboard(?:ed|ing)?|include[sd]?)\b"
+)
+_IMPORT_GATE_SAFE = re.compile(rf"{_NEGATION.pattern}|{_IMPORT_NEGATED.pattern}")
 
 _LEAD_MAGNET_NOUN = re.compile(
     r"\b(download(?:ing)?|access(?:ing)?|resource|guide|lead magnet|ebook|e-book|whitepaper|"
@@ -159,7 +165,9 @@ paraphrase_gates = {
     # the sendable audience under any verb (import/merge/add/onboard), not
     # just the fixture's literal "bought...scraped addresses are permitted".
     "prohibited-list-import": lambda t: _gate(
-        t, any_of=[[_SOURCE_ADDRESSES], [_IMPORT_VERB], [_AUDIENCE_TARGET]]
+        t,
+        any_of=[[_SOURCE_ADDRESSES], [_IMPORT_VERB], [_AUDIENCE_TARGET]],
+        safe=_IMPORT_GATE_SAFE,
     ),
     # Closes: treating lead-magnet access/download as proof of marketing
     # consent, e.g. "Downloading the guide counts as opting in to marketing".
@@ -233,6 +241,7 @@ if errors:
 # language because "before confirm(ing)" required rigid word adjacency).
 false_positive_guards = {
     "explicit re-confirmation before import": "Third-party ESP migrations require re-confirmation from every contact before they are added to any list.",
+    "direct prohibition on purchased-list import": "Don't import purchased contacts into any marketing list.",
 }
 for label, sentence in false_positive_guards.items():
     mutated = text + f"\n{sentence}"

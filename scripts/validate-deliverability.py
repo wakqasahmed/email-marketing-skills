@@ -85,7 +85,7 @@ _AUTH_BYPASS = re.compile(
 )
 _AUTH_BYPASS_NEGATED = re.compile(
     r"\b(never|do not|don't|does not|doesn't|must not|cannot|can't|shall not)\s+"
-    r"(skip|bypass(?:es|ing)?|exempt\w*|waive[sd]?)\b"
+    r"(skip|bypass(?:es|ing)?|exempt\w*|waive[sd]?|turn off|disable[sd]?)\b"
 )
 
 _COMPLAINT_TERM = re.compile(r"\bcomplain(?:t|ts|ed|ing)?\b")
@@ -113,6 +113,8 @@ _REPUTATION_INHERIT_NEGATED = re.compile(
     r"(?:\w+\s+){0,2}(inherit\w*|transfer\w*|reuse\w*|borrow\w*|take on|adopt\w*|assume\w*)\b"
 )
 _FULL_THROUGHPUT_BYPASS = re.compile(r"\bfree to send at full throughput\b")
+_FULL_THROUGHPUT_NEGATED = re.compile(r"\b(?:never|not) free to send at full throughput\b")
+_SUPPRESSION_CONVENIENCE_NEGATED = re.compile(r"\bnot when convenient\b")
 
 
 def _normalize(text: str) -> str:
@@ -147,7 +149,7 @@ paraphrase_gates = {
     "suppression-grace-period": lambda t: _gate(
         t,
         any_of=[[_COMPLAINT_TERM, _SUPPRESS_TERM], [_SUPPRESSION_DELAY]],
-        safe=[_SUPPRESSION_DELAY_NEGATED],
+        safe=[_SUPPRESSION_DELAY_NEGATED, _SUPPRESSION_CONVENIENCE_NEGATED],
     ),
     # Closes: a new IP/domain inheriting another address's warmed-up
     # reputation to skip warm-up, e.g. "A brand-new IP can inherit a
@@ -158,7 +160,9 @@ paraphrase_gates = {
         safe=[_REPUTATION_INHERIT_NEGATED],
     ),
     "warmup-throughput-bypass": lambda t: _gate(
-        t, any_of=[[_IP_OR_DOMAIN_TERM], [_FULL_THROUGHPUT_BYPASS]]
+        t,
+        any_of=[[_IP_OR_DOMAIN_TERM], [_FULL_THROUGHPUT_BYPASS]],
+        safe=[_FULL_THROUGHPUT_NEGATED],
     ),
 }
 
@@ -221,6 +225,9 @@ if errors:
 false_positive_guards = {
     "explicit reputation non-inheritance": "A new domain or IP cannot reuse another domain's reputation and must warm up independently.",
     "explicit no suppression delay": "Complaint suppression must never wait for a grace period; sync immediately.",
+    "direct prohibition on disabling DKIM": "Never turn off DKIM signing.",
+    "direct prohibition on day-one throughput": "A new IP is never free to send at full throughput on day one.",
+    "direct prohibition on convenient complaint handling": "Process complaints immediately, not when convenient.",
 }
 for label, sentence in false_positive_guards.items():
     mutated = text + f"\n{sentence}"
