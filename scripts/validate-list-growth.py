@@ -74,7 +74,7 @@ contradictions = {
 # gate keys on intent (what is being permitted) rather than exact wording.
 
 _NEGATION = re.compile(
-    r"\b(never|do not|don't|does not|doesn't|only after|only when|not permitted|"
+    r"\b(never|do not|does not|doesn't|only after|only when|not permitted|"
     r"prohibited|before confirm|before confirming|unconfirmed|no hidden|without "
     r"presenting|not proof of|requires? (?:re-)?confirmation|require re-confirmation|"
     r"must (?:be )?(?:re-)?confirm\w*)\b"
@@ -97,7 +97,7 @@ _SOURCE_ADDRESSES = re.compile(
 )
 _IMPORT_VERB = re.compile(
     r"\b(import(?:ed|ing)?|merge[sd]?|merging|add(?:ed|ing)?|onboard(?:ed|ing)?|include[sd]?|"
-    r"bring(?:ing)? in|brought in|pull(?:ed|ing)? in|source[d]? from)\b"
+    r"bring(?:ing)? in|brought in|pull(?:ed|ing)? in|fold(?:ed|ing)? into|source[d]? from)\b"
 )
 _AUDIENCE_TARGET = re.compile(r"\b(audience|subscriber base|mailing list|marketing list|send list|list|lists|addresses|contacts)\b")
 
@@ -105,13 +105,17 @@ _LEAD_MAGNET_NOUN = re.compile(
     r"\b(download(?:ing)?|access(?:ing)?|resource|guide|lead magnet|ebook|e-book|whitepaper|"
     r"checklist|template|freebie|content upgrade|cheat sheet|pdf|tool)\b"
 )
+_INTERACTION_NOUN = re.compile(
+    r"\b(open(?:ing|ed)?|click(?:ing|ed)?|visit(?:ing|ed)?|brows(?:e|ing|ed)|engag(?:e|ing|ed)|interaction)\b"
+)
 _EQUATES_TO = re.compile(
     r"\b(counts as|constitutes|implies|equals|serves as|is treated as|is considered|"
     r"amounts to|equates to|is equivalent to)\b|"
-    r"\bis (?:basically |essentially |pretty much )?the same as\b"
+    r"\bis (?:basically |essentially |pretty much )?the same as\b|"
+    r"\bis all the permission we need\b"
 )
 _CONSENT_NOUN = re.compile(
-    r"\bopt(?:ing)?[- ]?in\b|\bconsent\b|\bsubscri\w*\b|\bmarketing permission\b|"
+    r"\bopt(?:ing)?[- ]?in(?:to)?\b|\bconsent\b|\bsubscri\w*\b|\bmarketing permission\b|"
     r"\bnewsletter\b|\bmarketing emails?\b"
 )
 
@@ -160,7 +164,7 @@ paraphrase_gates = {
     # Closes: treating lead-magnet access/download as proof of marketing
     # consent, e.g. "Downloading the guide counts as opting in to marketing".
     "lead-magnet-implies-consent": lambda t: _gate(
-        t, any_of=[[_LEAD_MAGNET_NOUN], [_EQUATES_TO], [_CONSENT_NOUN]]
+        t, any_of=[[_LEAD_MAGNET_NOUN, _INTERACTION_NOUN], [_EQUATES_TO], [_CONSENT_NOUN]]
     ),
     # Closes: confirming one list/channel/purpose silently granting every
     # other list/channel/purpose, e.g. "Confirming any single list
@@ -266,6 +270,22 @@ fixtures = {
     "novel third-party import paraphrase": (
         "",
         "\nThird-party marketing lists can be merged into our subscriber base without additional verification.",
+    ),
+    "implicit interaction as consent": (
+        "",
+        "\nOpening our emails is all the permission we need to send marketing emails.",
+    ),
+    "folded-into list import": (
+        "",
+        "\nPurchased contacts can be folded into our marketing audience.",
+    ),
+    "opting into marketing": (
+        "",
+        "\nDownloading the guide counts as opting into marketing emails.",
+    ),
+    "opt-out default does not excuse inferred consent": (
+        "",
+        "\nDon't make contacts opt out by default: downloading the guide is all the permission we need for marketing emails.",
     ),
 }
 for label, (deleted_text, appended_text) in fixtures.items():

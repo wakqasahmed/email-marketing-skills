@@ -78,6 +78,7 @@ contradictions = {
 _AUTH_TERM = re.compile(r"\b(spf|dkim|dmarc)\b")
 _AUTH_BYPASS = re.compile(
     r"\bskip(?:s|ping|ped)?\b|\bbypass(?:es|ed|ing)?\b|\bexempt\w*\b|\bwaive[sd]?\b|"
+    r"\bturn off\b|\bdisable[sd]?\b|"
     r"\b(?:don'?t|doesn'?t) need to\b|\bno longer needs?\b|\bnot required for\b|"
     r"\b(?:aren'?t|isn'?t|is not|are not|not) (?:really |strictly )?necessary\b|"
     r"\boptional for\b"
@@ -93,7 +94,7 @@ _SUPPRESSION_DELAY = re.compile(
     r"\bgrace period\b|\bgrace window\b|\bonly after\b.{0,20}\bdays?\b|\bwait until\b|"
     r"\bdelay(?:ed|ing)? suppression\b|\b\d+[- ]day grace\b|\bno rush\b|"
     r"\bcouple (?:of )?weeks?\b|\bfew weeks\b|\btake (?:your|the) time\b|\bnot urgent\b|"
-    r"\bwhen convenient\b|\beventually\b"
+    r"\bwhen convenient\b|\beventually\b|\bno need to (?:process|handle)\b.{0,30}\bright away\b"
 )
 _SUPPRESSION_DELAY_NEGATED = re.compile(
     r"\b(never|do not|don't|does not|doesn't|must not|cannot|can't|shall not|"
@@ -111,6 +112,7 @@ _REPUTATION_INHERIT_NEGATED = re.compile(
     r"\b(never|do not|don't|does not|doesn't|must not|cannot|can't|shall not)\s+"
     r"(?:\w+\s+){0,2}(inherit\w*|transfer\w*|reuse\w*|borrow\w*|take on|adopt\w*|assume\w*)\b"
 )
+_FULL_THROUGHPUT_BYPASS = re.compile(r"\bfree to send at full throughput\b")
 
 
 def _normalize(text: str) -> str:
@@ -144,7 +146,7 @@ paraphrase_gates = {
     # "Suppress complaints only after a 30-day grace window".
     "suppression-grace-period": lambda t: _gate(
         t,
-        any_of=[[_COMPLAINT_TERM], [_SUPPRESS_TERM], [_SUPPRESSION_DELAY]],
+        any_of=[[_COMPLAINT_TERM, _SUPPRESS_TERM], [_SUPPRESSION_DELAY]],
         safe=[_SUPPRESSION_DELAY_NEGATED],
     ),
     # Closes: a new IP/domain inheriting another address's warmed-up
@@ -154,6 +156,9 @@ paraphrase_gates = {
         t,
         any_of=[[_REPUTATION_TERM], [_IP_OR_DOMAIN_TERM], [_REPUTATION_INHERIT]],
         safe=[_REPUTATION_INHERIT_NEGATED],
+    ),
+    "warmup-throughput-bypass": lambda t: _gate(
+        t, any_of=[[_IP_OR_DOMAIN_TERM], [_FULL_THROUGHPUT_BYPASS]]
     ),
 }
 
@@ -253,6 +258,22 @@ fixtures = {
     "novel suppression delay paraphrase": (
         "",
         "\nComplaint suppression can wait until the end of the billing cycle.",
+    ),
+    "turn off DKIM signing": (
+        "",
+        "\nTrusted senders can turn off DKIM signing.",
+    ),
+    "complaint processing can wait": (
+        "",
+        "\nThere is no need to process complaints right away.",
+    ),
+    "full-throughput warmup bypass": (
+        "",
+        "\nA new IP is free to send at full throughput on day one.",
+    ),
+    "convenient complaint suppression": (
+        "",
+        "\nProcess complaints when convenient.",
     ),
 }
 for label, (deleted_text, appended_text) in fixtures.items():
