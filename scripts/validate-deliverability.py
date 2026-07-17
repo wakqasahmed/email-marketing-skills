@@ -113,8 +113,15 @@ _REPUTATION_INHERIT_NEGATED = re.compile(
     r"(?:\w+\s+){0,2}(inherit\w*|transfer\w*|reuse\w*|borrow\w*|take on|adopt\w*|assume\w*)\b"
 )
 _FULL_THROUGHPUT_BYPASS = re.compile(r"\bfree to send at full throughput\b")
-_FULL_THROUGHPUT_NEGATED = re.compile(r"\b(?:never|not) free to send at full throughput\b")
-_SUPPRESSION_CONVENIENCE_NEGATED = re.compile(r"\bnot when convenient\b")
+_FULL_THROUGHPUT_NEGATED = re.compile(
+    r"\b(?:never|do not|don't|does not|doesn't|must not|cannot|can't|shall not|not)\s+"
+    r"(?:\w+\s+){0,2}free to send at full throughput\b"
+)
+_SUPPRESSION_CONVENIENCE_NEGATED = re.compile(
+    r"\bnot when convenient\b|"
+    r"\b(?:never|do not|don't|does not|doesn't|must not|cannot|can't|shall not)\s+"
+    r"(?:\w+\s+){0,3}(?:process|handle)\s+complaints?\s+when convenient\b"
+)
 
 
 def _normalize(text: str) -> str:
@@ -228,6 +235,8 @@ false_positive_guards = {
     "direct prohibition on disabling DKIM": "Never turn off DKIM signing.",
     "direct prohibition on day-one throughput": "A new IP is never free to send at full throughput on day one.",
     "direct prohibition on convenient complaint handling": "Process complaints immediately, not when convenient.",
+    "direct prohibition on must-not throughput": "A new IP must not be free to send at full throughput on day one.",
+    "direct prohibition on convenient complaint processing": "Do not process complaints when convenient.",
 }
 for label, sentence in false_positive_guards.items():
     mutated = text + f"\n{sentence}"

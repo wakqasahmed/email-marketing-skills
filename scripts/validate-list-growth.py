@@ -103,7 +103,7 @@ _AUDIENCE_TARGET = re.compile(r"\b(audience|subscriber base|mailing list|marketi
 _IMPORT_NEGATED = re.compile(
     r"\b(never|do not|don't|does not|doesn't|must not|cannot|can't|shall not)\s+"
     r"(?:\w+\s+){0,3}(import(?:ed|ing)?|merge[sd]?|merging|add(?:ed|ing)?|"
-    r"onboard(?:ed|ing)?|include[sd]?)\b"
+    r"onboard(?:ed|ing)?|include[sd]?|fold(?:ed|ing)? into)\b"
 )
 _IMPORT_GATE_SAFE = re.compile(rf"{_NEGATION.pattern}|{_IMPORT_NEGATED.pattern}")
 
@@ -242,6 +242,7 @@ if errors:
 false_positive_guards = {
     "explicit re-confirmation before import": "Third-party ESP migrations require re-confirmation from every contact before they are added to any list.",
     "direct prohibition on purchased-list import": "Don't import purchased contacts into any marketing list.",
+    "direct prohibition on folded purchased-list import": "Purchased contacts must not be folded into our marketing audience.",
 }
 for label, sentence in false_positive_guards.items():
     mutated = text + f"\n{sentence}"
