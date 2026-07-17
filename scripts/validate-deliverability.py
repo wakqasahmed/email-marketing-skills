@@ -95,12 +95,21 @@ _SUPPRESSION_DELAY = re.compile(
     r"\bcouple (?:of )?weeks?\b|\bfew weeks\b|\btake (?:your|the) time\b|\bnot urgent\b|"
     r"\bwhen convenient\b|\beventually\b"
 )
+_SUPPRESSION_DELAY_NEGATED = re.compile(
+    r"\b(never|do not|don't|does not|doesn't|must not|cannot|can't|shall not|"
+    r"without any|with no)\s+(?:\w+\s+){0,3}"
+    r"(grace period|grace window|delay(?:ed|ing)?|wait|rush)\b"
+)
 
 _REPUTATION_TERM = re.compile(r"\breputation\b")
 _IP_OR_DOMAIN_TERM = re.compile(r"\bip\b|\bdomain\b")
 _REPUTATION_INHERIT = re.compile(
     r"\binherit\w*\b|\btransfer\w*\b|\breuse\w*\b|\bcarry over\b|\bborrow\w*\b|"
     r"\bshares? the reputation\b|\btake on\b|\badopt\w*\b|\bassume\w*\b"
+)
+_REPUTATION_INHERIT_NEGATED = re.compile(
+    r"\b(never|do not|don't|does not|doesn't|must not|cannot|can't|shall not)\s+"
+    r"(?:\w+\s+){0,2}(inherit\w*|transfer\w*|reuse\w*|borrow\w*|take on|adopt\w*|assume\w*)\b"
 )
 
 
@@ -134,13 +143,17 @@ paraphrase_gates = {
     # Closes: delaying complaint suppression past the required window, e.g.
     # "Suppress complaints only after a 30-day grace window".
     "suppression-grace-period": lambda t: _gate(
-        t, any_of=[[_COMPLAINT_TERM], [_SUPPRESS_TERM], [_SUPPRESSION_DELAY]]
+        t,
+        any_of=[[_COMPLAINT_TERM], [_SUPPRESS_TERM], [_SUPPRESSION_DELAY]],
+        safe=[_SUPPRESSION_DELAY_NEGATED],
     ),
     # Closes: a new IP/domain inheriting another address's warmed-up
     # reputation to skip warm-up, e.g. "A brand-new IP can inherit a
     # warmed-up IP reputation and send at full volume day one".
     "reputation-inheritance": lambda t: _gate(
-        t, any_of=[[_REPUTATION_TERM], [_IP_OR_DOMAIN_TERM], [_REPUTATION_INHERIT]]
+        t,
+        any_of=[[_REPUTATION_TERM], [_IP_OR_DOMAIN_TERM], [_REPUTATION_INHERIT]],
+        safe=[_REPUTATION_INHERIT_NEGATED],
     ),
 }
 
@@ -196,6 +209,18 @@ text = skill.read_text()
 errors = validate(text)
 if errors:
     raise SystemExit("Deliverability contract invalid: " + ", ".join(errors))
+
+# False-positive guards: compliant statements a real skill might legitimately
+# contain, which must NOT trip the paraphrase gates. Regression cases from
+# PR #21 review (both gates originally had no negation backoff at all).
+false_positive_guards = {
+    "explicit reputation non-inheritance": "A new domain or IP cannot reuse another domain's reputation and must warm up independently.",
+    "explicit no suppression delay": "Complaint suppression must never wait for a grace period; sync immediately.",
+}
+for label, sentence in false_positive_guards.items():
+    mutated = text + f"\n{sentence}"
+    if validate(mutated):
+        raise SystemExit(f"False-positive guard failed: '{label}' incorrectly flagged as a violation")
 
 fixtures = {
     "auth alignment outcome": ("publish the `_dmarc` record and verify alignment", ""),

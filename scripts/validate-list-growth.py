@@ -76,7 +76,8 @@ contradictions = {
 _NEGATION = re.compile(
     r"\b(never|do not|don't|does not|doesn't|only after|only when|not permitted|"
     r"prohibited|before confirm|before confirming|unconfirmed|no hidden|without "
-    r"presenting|not proof of)\b"
+    r"presenting|not proof of|requires? (?:re-)?confirmation|require re-confirmation|"
+    r"must (?:be )?(?:re-)?confirm\w*)\b"
 )
 
 _SUBSCRIBE_WORD = re.compile(r"\bsubscri\w*\b")
@@ -221,6 +222,18 @@ text = skill.read_text()
 errors = validate(text)
 if errors:
     raise SystemExit("List-growth contract invalid: " + ", ".join(errors))
+
+# False-positive guards: compliant statements a real skill might legitimately
+# contain, which must NOT trip the paraphrase gates. Regression case from
+# PR #21 review (prohibited-list-import flagged compliant re-confirmation
+# language because "before confirm(ing)" required rigid word adjacency).
+false_positive_guards = {
+    "explicit re-confirmation before import": "Third-party ESP migrations require re-confirmation from every contact before they are added to any list.",
+}
+for label, sentence in false_positive_guards.items():
+    mutated = text + f"\n{sentence}"
+    if validate(mutated):
+        raise SystemExit(f"False-positive guard failed: '{label}' incorrectly flagged as a violation")
 
 fixtures = {
     "pending outcome": ("matching marketing and welcome", ""),
