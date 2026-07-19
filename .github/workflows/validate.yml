@@ -21,3 +21,5 @@ jobs:
       - run: python3 scripts/validate-orchestration.py
       - run: python3 scripts/validate-list-growth.py
       - run: python3 scripts/validate-deliverability.py
+      - run: bash skills/eval/run-eval.sh
+      - run: bash skills/00-email-marketing-guardrails/eval/run-eval.sh
