@@ -1,11 +1,17 @@
-# Email Marketing Skills — Archived
+# Email Marketing Skills
 
-This repository is a historical reference. It is no longer maintained or distributed independently.
+Canonical source for permission-first email marketing, lifecycle, deliverability, and compliance skills.
 
-Install the canonical catalogue instead:
+## Install
 
 ```bash
-npx skills@latest add wakqasahmed/skills
+npx skills@latest add wakqasahmed/email-marketing-skills
 ```
 
-The active skills now live under [`skills/email-marketing/`](https://github.com/wakqasahmed/skills/tree/main/skills/email-marketing) in [wakqasahmed/skills](https://github.com/wakqasahmed/skills).
+## Contents
+
+The installable skills live in [`skills/`](skills/).
+
+## Aggregate catalogue
+
+Changes merged to this repository are automatically synchronized to [wakqasahmed/skills](https://github.com/wakqasahmed/skills). Treat this repository as the source of truth for email marketing skills.
