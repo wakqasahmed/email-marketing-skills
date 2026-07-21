@@ -42,6 +42,8 @@ jobs:
           --runner "${{ inputs.harness_runner }}"
           --image "${{ inputs.harness_image }}"
           --trials "${{ inputs.trials }}"
+          --model-version "${{ inputs.model_version }}"
+          --harness-version "${{ inputs.harness_version }}"
           --output promotional-offer-harness-results.json
       - uses: actions/upload-artifact@v4
         with:

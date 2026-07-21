@@ -9,6 +9,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+from evaluate_outcomes import score
 
 EVAL = Path(__file__).parent
 FIXTURES = EVAL / "fixtures" / "held-out-scenarios.json"
@@ -16,10 +17,9 @@ PASS_RATE_THRESHOLD = 0.8
 
 
 def validate(records: list[dict], cases: list[dict], trials: int) -> dict:
-    expected = {case["name"]: case["expected"] for case in cases}
     required = {
-        (name, condition, trial)
-        for name in expected
+        (case["name"], condition, trial)
+        for case in cases
         for condition in ("enabled", "disabled")
         for trial in range(trials)
     }
@@ -33,8 +33,10 @@ def validate(records: list[dict], cases: list[dict], trials: int) -> dict:
 
     enabled = [record for record in records if record["condition"] == "enabled"]
     disabled = [record for record in records if record["condition"] == "disabled"]
-    enabled_passes = sum(record.get("outcome") == expected[record["name"]] for record in enabled)
-    disabled_passes = sum(record.get("outcome") == expected[record["name"]] for record in disabled)
+    enabled_passes, enabled_failures = score(enabled, cases)
+    disabled_passes, disabled_failures = score(disabled, cases)
+    if enabled_failures or disabled_failures:
+        raise ValueError("harness returned invalid outcome records")
     return {
         "enabled_pass_rate": enabled_passes / len(enabled),
         "disabled_pass_rate": disabled_passes / len(disabled),
@@ -43,7 +45,9 @@ def validate(records: list[dict], cases: list[dict], trials: int) -> dict:
 
 
 def prepare_workspace(workspace: Path, runner: Path, condition: str) -> None:
-    shutil.copy2(FIXTURES, workspace / "cases.json")
+    cases = json.loads(FIXTURES.read_text())["cases"]
+    prompts = {"cases": [{"name": case["name"], "prompt": case["prompt"]} for case in cases]}
+    (workspace / "cases.json").write_text(json.dumps(prompts))
     shutil.copy2(runner, workspace / "runner")
     (workspace / "runner").chmod(0o755)
     if condition == "enabled":
@@ -62,11 +66,29 @@ def isolated_command(workspace: Path, image: str, condition: str, trial: int) ->
     ]
 
 
+def build_report(
+    trials: int,
+    model_version: str,
+    harness_version: str,
+    summary: dict,
+    records: list[dict],
+) -> dict:
+    return {
+        "trials": trials,
+        "model_version": model_version,
+        "harness_version": harness_version,
+        "summary": summary,
+        "records": records,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--runner", type=Path, required=True)
     parser.add_argument("--image", required=True)
     parser.add_argument("--trials", type=int, choices=range(3, 7), default=3)
+    parser.add_argument("--model-version", required=True)
+    parser.add_argument("--harness-version", required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     runner = args.runner.resolve()
@@ -92,7 +114,8 @@ def main() -> int:
     summary = validate(records, cases, args.trials)
     if summary["enabled_pass_rate"] < PASS_RATE_THRESHOLD or summary["delta"] <= 0:
         raise SystemExit(f"harness gate failed: {summary}")
-    args.output.write_text(json.dumps({"trials": args.trials, "summary": summary, "records": records}, indent=2))
+    report = build_report(args.trials, args.model_version, args.harness_version, summary, records)
+    args.output.write_text(json.dumps(report, indent=2))
     print(json.dumps(summary))
     return 0
 
