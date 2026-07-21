@@ -23,13 +23,12 @@ def prepare_workspace(workspace: Path, runner: Path, condition: str, cases: list
         shutil.copy2(EVAL.parent / "SKILL.md", workspace / "SKILL.md")
 
 
-def isolated_command(workspace: Path, image: str, condition: str, trial: int, model: str, harness_version: str) -> list[str]:
+def isolated_command(workspace: Path, image: str, trial: int, model: str, harness_version: str) -> list[str]:
     return [
         "docker", "run", "--rm", "--network", "none", "--read-only",
         "--tmpfs", "/tmp:rw,noexec,nosuid,size=64m",
         "--mount", f"type=bind,source={workspace},target=/workspace,readonly",
         "--env", "HARNESS_WORKSPACE=/workspace",
-        "--env", f"HARNESS_CONDITION={condition}",
         "--env", f"HARNESS_TRIAL={trial}",
         "--env", f"HARNESS_MODEL={model}",
         "--env", f"HARNESS_VERSION={harness_version}",
@@ -64,13 +63,19 @@ def main() -> int:
                 workspace = Path(directory)
                 prepare_workspace(workspace, runner, condition, cases)
                 result = subprocess.run(
-                    isolated_command(workspace, args.image, condition, trial, args.model, args.harness_version),
+                    isolated_command(workspace, args.image, trial, args.model, args.harness_version),
                     text=True,
                     capture_output=True,
                     env={"PATH": os.environ["PATH"], "HOME": "/nonexistent"},
                     check=True,
                 )
-                records.extend(json.loads(result.stdout))
+                outcomes = json.loads(result.stdout)
+                records.extend({
+                    "name": outcome.get("name"),
+                    "condition": condition,
+                    "trial": trial,
+                    "outcome": outcome.get("outcome"),
+                } for outcome in outcomes)
 
     failures, summary = validate_records(records, cases, args.trials)
     if failures:

@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 from evaluate_outcomes import load_cases, validate_records
-from run_harness import prepare_workspace
+from run_harness import isolated_command, prepare_workspace
 
 
 class EvaluationTests(unittest.TestCase):
@@ -59,6 +59,12 @@ class EvaluationTests(unittest.TestCase):
         self.assertEqual(summary["enabled_pass_rate"], 1)
         self.assertEqual(summary["disabled_pass_rate"], 11 / 12)
         self.assertAlmostEqual(summary["delta"], 1 / 12)
+
+    def test_harness_does_not_expose_the_ablation_condition(self) -> None:
+        command = isolated_command(Path("/tmp/workspace"), "example-image", 0, "example-model", "v1")
+
+        self.assertNotIn("HARNESS_CONDITION=enabled", command)
+        self.assertNotIn("enabled", command)
 
 
 if __name__ == "__main__":
