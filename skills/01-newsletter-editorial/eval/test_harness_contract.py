@@ -3,6 +3,7 @@
 import importlib.util
 import json
 from pathlib import Path
+import tempfile
 
 
 EVAL = Path(__file__).parent
@@ -39,9 +40,23 @@ def main() -> int:
     try:
         MODULE.validate(invalid, cases, 3, "fixture-runner/v1", "fixture-model/v1")
     except ValueError:
-        print("PASS: versioned local runner output interface")
-        return 0
-    raise SystemExit("runner output version mutation was accepted")
+        pass
+    else:
+        raise SystemExit("runner output version mutation was accepted")
+
+    with tempfile.TemporaryDirectory() as directory:
+        workspace = Path(directory)
+        MODULE.prepare_workspace(workspace, EVAL / "run-eval.sh", "disabled")
+        runner_cases = json.loads((workspace / "cases.json").read_text())
+        if set(runner_cases) != {"schema_version", "cases"}:
+            raise SystemExit("runner input schema leaked evaluator fields")
+        if any(set(case) != {"name", "prompt"} for case in runner_cases["cases"]):
+            raise SystemExit("runner workspace leaked expected outcomes")
+        if (workspace / "SKILL.md").exists():
+            raise SystemExit("disabled workspace leaked the skill")
+
+    print("PASS: versioned local runner output interface and answer-key isolation")
+    return 0
 
 
 if __name__ == "__main__":

@@ -12,6 +12,7 @@ from pathlib import Path
 
 EVAL = Path(__file__).parent
 FIXTURES = EVAL / "fixtures" / "held-out-scenarios.json"
+RUNNER_INPUTS = EVAL / "fixtures" / "runner-inputs.json"
 RUNNER_CONTRACT = EVAL / "fixtures" / "runner-output-schema.json"
 
 
@@ -50,7 +51,7 @@ def validate(
 
 
 def prepare_workspace(workspace: Path, runner: Path, condition: str) -> None:
-    shutil.copy2(FIXTURES, workspace / "cases.json")
+    shutil.copy2(RUNNER_INPUTS, workspace / "cases.json")
     shutil.copy2(runner, workspace / "runner")
     (workspace / "runner").chmod(0o755)
     if condition == "enabled":
