@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "required_record_fields": [
+    "name",
+    "condition",
+    "trial",
+    "outcome",
+    "runner_version",
+    "model"
+  ]
+}

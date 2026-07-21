@@ -8,7 +8,15 @@ on:
         required: true
         type: string
       image:
-        description: Approved container image containing the runner runtime
+        description: Digest-pinned approved container image containing the runner runtime
+        required: true
+        type: string
+      runner_version:
+        description: Immutable version of the repository-controlled runner
+        required: true
+        type: string
+      model:
+        description: Versioned target model identifier
         required: true
         type: string
       trials:
@@ -32,6 +40,8 @@ jobs:
       - run: >-
           python3 skills/01-newsletter-editorial/eval/run_harness.py
           --runner "${{ inputs.runner }}"
+          --runner-version "${{ inputs.runner_version }}"
+          --model "${{ inputs.model }}"
           --image "${{ inputs.image }}"
           --trials "${{ inputs.trials }}"
           --output newsletter-editorial-harness.json

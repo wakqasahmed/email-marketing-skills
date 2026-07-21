@@ -12,9 +12,21 @@ from pathlib import Path
 
 EVAL = Path(__file__).parent
 FIXTURES = EVAL / "fixtures" / "held-out-scenarios.json"
+RUNNER_CONTRACT = EVAL / "fixtures" / "runner-output-schema.json"
 
 
-def validate(records: list[dict], cases: list[dict], trials: int) -> dict:
+def validate(
+    records: list[dict], cases: list[dict], trials: int, runner_version: str, model: str
+) -> dict:
+    contract = json.loads(RUNNER_CONTRACT.read_text())
+    required_fields = set(contract["required_record_fields"])
+    if contract["schema_version"] != 1:
+        raise ValueError("unsupported runner output schema")
+    for record in records:
+        if not required_fields.issubset(record):
+            raise ValueError("harness record does not satisfy the versioned runner output schema")
+        if record["runner_version"] != runner_version or record["model"] != model:
+            raise ValueError("harness record runner version or model does not match the declared run")
     expected = {case["name"]: case["expected"] for case in cases}
     required = {
         (name, condition, trial)
@@ -45,7 +57,9 @@ def prepare_workspace(workspace: Path, runner: Path, condition: str) -> None:
         shutil.copy2(EVAL.parent / "SKILL.md", workspace / "SKILL.md")
 
 
-def isolated_command(workspace: Path, image: str, condition: str, trial: int) -> list[str]:
+def isolated_command(
+    workspace: Path, image: str, condition: str, trial: int, runner_version: str, model: str
+) -> list[str]:
     return [
         "docker", "run", "--rm", "--network", "none", "--read-only",
         "--tmpfs", "/tmp:rw,noexec,nosuid,size=64m",
@@ -53,6 +67,8 @@ def isolated_command(workspace: Path, image: str, condition: str, trial: int) ->
         "--env", "HARNESS_WORKSPACE=/workspace",
         "--env", f"HARNESS_CONDITION={condition}",
         "--env", f"HARNESS_TRIAL={trial}",
+        "--env", f"HARNESS_RUNNER_VERSION={runner_version}",
+        "--env", f"HARNESS_MODEL={model}",
         "--workdir", "/workspace", image, "/workspace/runner",
     ]
 
@@ -60,6 +76,8 @@ def isolated_command(workspace: Path, image: str, condition: str, trial: int) ->
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--runner", type=Path, required=True)
+    parser.add_argument("--runner-version", required=True)
+    parser.add_argument("--model", required=True)
     parser.add_argument("--image", required=True)
     parser.add_argument("--trials", type=int, choices=range(3, 7), default=3)
     parser.add_argument("--output", type=Path, required=True)
@@ -67,6 +85,8 @@ def main() -> int:
     runner = args.runner.resolve()
     if not runner.is_file() or not runner.is_relative_to(Path.cwd()):
         raise SystemExit("runner must be a repository-controlled file")
+    if "@sha256:" not in args.image:
+        raise SystemExit("image must be pinned by digest")
 
     cases = json.loads(FIXTURES.read_text())["cases"]
     records = []
@@ -76,7 +96,9 @@ def main() -> int:
                 workspace = Path(directory)
                 prepare_workspace(workspace, runner, condition)
                 result = subprocess.run(
-                    isolated_command(workspace, args.image, condition, trial),
+                    isolated_command(
+                        workspace, args.image, condition, trial, args.runner_version, args.model
+                    ),
                     text=True,
                     capture_output=True,
                     env={"PATH": os.environ["PATH"], "HOME": "/nonexistent"},
@@ -84,10 +106,23 @@ def main() -> int:
                 )
                 records.extend(json.loads(result.stdout))
 
-    summary = validate(records, cases, args.trials)
+    summary = validate(records, cases, args.trials, args.runner_version, args.model)
     if summary["enabled_pass_rate"] < 0.8 or summary["delta"] <= 0:
         raise SystemExit(f"harness gate failed: {summary}")
-    args.output.write_text(json.dumps({"trials": args.trials, "summary": summary, "records": records}, indent=2))
+    args.output.write_text(
+        json.dumps(
+            {
+                "trials": args.trials,
+                "runner": str(args.runner),
+                "runner_version": args.runner_version,
+                "model": args.model,
+                "image": args.image,
+                "summary": summary,
+                "records": records,
+            },
+            indent=2,
+        )
+    )
     print(json.dumps(summary))
     return 0
 
