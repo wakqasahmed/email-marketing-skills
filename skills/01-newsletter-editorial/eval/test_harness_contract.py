@@ -16,7 +16,7 @@ SPEC.loader.exec_module(MODULE)
 def records(cases: list[dict], trials: int) -> list[dict]:
     return [
         {
-            "name": case["name"],
+            "case_id": case["case_id"],
             "condition": condition,
             "trial": trial,
             "outcome": case["expected"],
@@ -50,12 +50,31 @@ def main() -> int:
         runner_cases = json.loads((workspace / "cases.json").read_text())
         if set(runner_cases) != {"schema_version", "cases"}:
             raise SystemExit("runner input schema leaked evaluator fields")
-        if any(set(case) != {"name", "prompt"} for case in runner_cases["cases"]):
+        if any(set(case) != {"case_id", "prompt"} for case in runner_cases["cases"]):
             raise SystemExit("runner workspace leaked expected outcomes")
+        if [case["case_id"] for case in runner_cases["cases"]] != [case["case_id"] for case in cases]:
+            raise SystemExit("runner inputs do not match evaluator case IDs")
+        if any(
+            not case["case_id"].startswith("case-")
+            or not case["case_id"].removeprefix("case-").isdigit()
+            for case in runner_cases["cases"]
+        ):
+            raise SystemExit("runner case IDs are not opaque")
         if (workspace / "SKILL.md").exists():
             raise SystemExit("disabled workspace leaked the skill")
+        command = MODULE.isolated_command(
+            workspace, "example@sha256:fixture", "disabled", 0, "fixture-runner/v1", "fixture-model/v1"
+        )
+        if any("HARNESS_CONDITION" in value for value in command):
+            raise SystemExit("runner command leaked the ablation condition")
 
-    print("PASS: versioned local runner output interface and answer-key isolation")
+        enabled_workspace = Path(directory) / "enabled"
+        enabled_workspace.mkdir()
+        MODULE.prepare_workspace(enabled_workspace, EVAL / "run-eval.sh", "enabled")
+        if not (enabled_workspace / "SKILL.md").exists():
+            raise SystemExit("enabled workspace omitted the skill")
+
+    print("PASS: versioned local runner output interface and blinded answer-key isolation")
     return 0
 
 

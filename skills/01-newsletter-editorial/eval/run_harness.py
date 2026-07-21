@@ -28,21 +28,21 @@ def validate(
             raise ValueError("harness record does not satisfy the versioned runner output schema")
         if record["runner_version"] != runner_version or record["model"] != model:
             raise ValueError("harness record runner version or model does not match the declared run")
-    expected = {case["name"]: case["expected"] for case in cases}
+    expected = {case["case_id"]: case["expected"] for case in cases}
     required = {
         (name, condition, trial)
         for name in expected
         for condition in ("enabled", "disabled")
         for trial in range(trials)
     }
-    keys = [(record.get("name"), record.get("condition"), record.get("trial")) for record in records]
+    keys = [(record.get("case_id"), record.get("condition"), record.get("trial")) for record in records]
     if set(keys) != required or len(keys) != len(required) or any(count != 1 for count in Counter(keys).values()):
         raise ValueError("harness records do not cover every case, condition, and trial exactly once")
 
     enabled = [record for record in records if record["condition"] == "enabled"]
     disabled = [record for record in records if record["condition"] == "disabled"]
-    enabled_passes = sum(record["outcome"] == expected[record["name"]] for record in enabled)
-    disabled_passes = sum(record["outcome"] == expected[record["name"]] for record in disabled)
+    enabled_passes = sum(record["outcome"] == expected[record["case_id"]] for record in enabled)
+    disabled_passes = sum(record["outcome"] == expected[record["case_id"]] for record in disabled)
     return {
         "enabled_pass_rate": enabled_passes / len(enabled),
         "disabled_pass_rate": disabled_passes / len(disabled),
@@ -66,8 +66,6 @@ def isolated_command(
         "--tmpfs", "/tmp:rw,noexec,nosuid,size=64m",
         "--mount", f"type=bind,source={workspace},target=/workspace,readonly",
         "--env", "HARNESS_WORKSPACE=/workspace",
-        "--env", f"HARNESS_CONDITION={condition}",
-        "--env", f"HARNESS_TRIAL={trial}",
         "--env", f"HARNESS_RUNNER_VERSION={runner_version}",
         "--env", f"HARNESS_MODEL={model}",
         "--workdir", "/workspace", image, "/workspace/runner",
@@ -105,7 +103,10 @@ def main() -> int:
                     env={"PATH": os.environ["PATH"], "HOME": "/nonexistent"},
                     check=True,
                 )
-                records.extend(json.loads(result.stdout))
+                records.extend(
+                    {**record, "condition": condition, "trial": trial}
+                    for record in json.loads(result.stdout)
+                )
 
     summary = validate(records, cases, args.trials, args.runner_version, args.model)
     if summary["enabled_pass_rate"] < 0.8 or summary["delta"] <= 0:
