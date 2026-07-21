@@ -1,0 +1,77 @@
+name: lead-nurture harness
+
+on:
+  schedule:
+    - cron: '23 4 * * 1'
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: Repository-controlled harness runner path; defaults to repository variable.
+        required: false
+        type: string
+      image:
+        description: Digest-pinned harness image; defaults to repository variable.
+        required: false
+        type: string
+      model:
+        description: Model identifier recorded in the report; defaults to repository variable.
+        required: false
+        type: string
+      harness_version:
+        description: Harness version recorded in the report; defaults to repository variable.
+        required: false
+        type: string
+      trials:
+        description: Trials per case and condition (3-6).
+        required: false
+        default: '3'
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate:
+    if: >-
+      (inputs.runner != '' || vars.LEAD_NURTURE_HARNESS != '') &&
+      (inputs.image != '' || vars.LEAD_NURTURE_HARNESS_IMAGE != '') &&
+      (inputs.model != '' || vars.LEAD_NURTURE_HARNESS_MODEL != '') &&
+      (inputs.harness_version != '' || vars.LEAD_NURTURE_HARNESS_VERSION != '')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run isolated with-skill and without-skill trials
+        env:
+          INPUT_RUNNER: ${{ inputs.runner }}
+          INPUT_IMAGE: ${{ inputs.image }}
+          INPUT_MODEL: ${{ inputs.model }}
+          INPUT_HARNESS_VERSION: ${{ inputs.harness_version }}
+          INPUT_TRIALS: ${{ inputs.trials }}
+          CONFIG_RUNNER: ${{ vars.LEAD_NURTURE_HARNESS }}
+          CONFIG_IMAGE: ${{ vars.LEAD_NURTURE_HARNESS_IMAGE }}
+          CONFIG_MODEL: ${{ vars.LEAD_NURTURE_HARNESS_MODEL }}
+          CONFIG_HARNESS_VERSION: ${{ vars.LEAD_NURTURE_HARNESS_VERSION }}
+        run: |
+          runner="${INPUT_RUNNER:-$CONFIG_RUNNER}"
+          image="${INPUT_IMAGE:-$CONFIG_IMAGE}"
+          model="${INPUT_MODEL:-$CONFIG_MODEL}"
+          harness_version="${INPUT_HARNESS_VERSION:-$CONFIG_HARNESS_VERSION}"
+          trials="${INPUT_TRIALS:-3}"
+          python3 skills/03-lead-nurture-education/eval/run_harness.py \
+            --runner "$runner" \
+            --image "$image" \
+            --model "$model" \
+            --harness-version "$harness_version" \
+            --trials "$trials" \
+            --output lead-nurture-harness-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lead-nurture-harness-report
+          path: lead-nurture-harness-report.json
+          if-no-files-found: warn
+          retention-days: 90
