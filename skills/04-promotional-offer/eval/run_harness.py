@@ -6,14 +6,18 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
-
-from evaluate_outcomes import score
 
 EVAL = Path(__file__).parent
 FIXTURES = EVAL / "fixtures" / "held-out-scenarios.json"
 PASS_RATE_THRESHOLD = 0.8
+
+if str(EVAL) not in sys.path:
+    sys.path.insert(0, str(EVAL))
+
+from evaluate_outcomes import score
 
 
 def validate(records: list[dict], cases: list[dict], trials: int) -> dict:
