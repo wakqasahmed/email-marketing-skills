@@ -3,22 +3,6 @@ name: promotional-offer harness
 on:
   workflow_dispatch:
     inputs:
-      harness_runner:
-        description: Repository-controlled executable path for the agent harness
-        required: true
-        type: string
-      harness_image:
-        description: Approved Docker image containing the runner runtime
-        required: true
-        type: string
-      model_version:
-        description: Model identifier used by the harness
-        required: true
-        type: string
-      harness_version:
-        description: Harness version or immutable revision
-        required: true
-        type: string
       trials:
         description: Trials per case and condition (3-6)
         required: false
@@ -39,13 +23,9 @@ jobs:
           python-version: "3.12"
       - run: >-
           python3 skills/04-promotional-offer/eval/run_harness.py
-          --runner "${{ inputs.harness_runner }}"
-          --image "${{ inputs.harness_image }}"
           --trials "${{ inputs.trials }}"
-          --model-version "${{ inputs.model_version }}"
-          --harness-version "${{ inputs.harness_version }}"
           --output promotional-offer-harness-results.json
       - uses: actions/upload-artifact@v4
         with:
-          name: promotional-offer-${{ inputs.model_version }}-${{ inputs.harness_version }}
+          name: promotional-offer-harness
           path: promotional-offer-harness-results.json
