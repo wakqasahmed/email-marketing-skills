@@ -42,7 +42,7 @@ class EvaluationTests(unittest.TestCase):
             prepare_workspace(workspace, runner, "disabled", cases)
             self.assertFalse((workspace / "SKILL.md").exists())
 
-    def test_outcome_validator_rejects_an_incorrect_harness_decision(self) -> None:
+    def test_outcome_validator_scores_a_disabled_miss_as_a_positive_delta(self) -> None:
         cases, failures = load_cases()
         self.assertEqual(failures, [])
         records = [
@@ -50,12 +50,15 @@ class EvaluationTests(unittest.TestCase):
             for case in cases
             for condition in ("enabled", "disabled")
         ]
-        incorrect_index = 4
+        incorrect_index = 5
         records[incorrect_index]["outcome"] = {"decision": "SEND", "reason_code": "ALL_APPLICABLE_GATES_PASSED", "required_actions": ["send"]}
 
-        failures, _ = validate_records(records, cases, 1)
+        failures, summary = validate_records(records, cases, 1)
 
-        self.assertIn(f"{cases[2]['name']}: outcome does not match expected outcome", failures)
+        self.assertEqual(failures, [])
+        self.assertEqual(summary["enabled_pass_rate"], 1)
+        self.assertEqual(summary["disabled_pass_rate"], 11 / 12)
+        self.assertAlmostEqual(summary["delta"], 1 / 12)
 
 
 if __name__ == "__main__":
