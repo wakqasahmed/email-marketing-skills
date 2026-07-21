@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 from evaluate_outcomes import load_cases, validate_records
-from run_harness import isolated_command, prepare_workspace
+from run_harness import isolated_command, prepare_workspace, runner_metadata, validate_image_reference
 
 
 class EvaluationTests(unittest.TestCase):
@@ -65,6 +65,17 @@ class EvaluationTests(unittest.TestCase):
 
         self.assertNotIn("HARNESS_CONDITION=enabled", command)
         self.assertNotIn("enabled", command)
+
+    def test_harness_rejects_a_mutable_image_tag(self) -> None:
+        with self.assertRaisesRegex(ValueError, "digest-pinned"):
+            validate_image_reference("registry.example/launch-harness:latest")
+        validate_image_reference("registry.example/launch-harness@sha256:" + "a" * 64)
+
+    def test_runner_metadata_records_revision_and_content_hash(self) -> None:
+        metadata = runner_metadata(Path(__file__))
+
+        self.assertRegex(metadata["runner_revision"], r"^[0-9a-f]{40}$")
+        self.assertRegex(metadata["runner_sha256"], r"^[0-9a-f]{64}$")
 
 
 if __name__ == "__main__":

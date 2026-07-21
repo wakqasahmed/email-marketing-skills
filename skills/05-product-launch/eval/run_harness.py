@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Run a declared launch harness in isolated skill-enabled and disabled workspaces."""
 import argparse
+import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -12,6 +14,26 @@ from evaluate_outcomes import load_cases, validate_records
 
 
 EVAL = Path(__file__).parent
+IMAGE_DIGEST_PATTERN = re.compile(r".+@sha256:[0-9a-f]{64}$")
+
+
+def validate_image_reference(image: str) -> None:
+    if not IMAGE_DIGEST_PATTERN.fullmatch(image):
+        raise ValueError("image must be digest-pinned as name@sha256:<64 lowercase hex characters>")
+
+
+def runner_metadata(runner: Path) -> dict[str, str]:
+    revision = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=Path.cwd(),
+        text=True,
+        capture_output=True,
+        check=True,
+    ).stdout.strip()
+    return {
+        "runner_revision": revision,
+        "runner_sha256": hashlib.sha256(runner.read_bytes()).hexdigest(),
+    }
 
 
 def prepare_workspace(workspace: Path, runner: Path, condition: str, cases: list[dict]) -> None:
@@ -48,6 +70,10 @@ def main() -> int:
     args = parser.parse_args()
     if not 0 < args.pass_rate_threshold <= 1:
         raise SystemExit("pass-rate threshold must be greater than 0 and at most 1")
+    try:
+        validate_image_reference(args.image)
+    except ValueError as error:
+        raise SystemExit(str(error)) from error
 
     runner = args.runner.resolve()
     if not runner.is_file() or not runner.is_relative_to(Path.cwd()):
@@ -84,8 +110,10 @@ def main() -> int:
         raise SystemExit(f"harness gate failed: {summary}")
 
     args.output.write_text(json.dumps({
+        "image_digest": args.image,
         "model": args.model,
         "harness_version": args.harness_version,
+        **runner_metadata(runner),
         "trials": args.trials,
         "pass_rate_threshold": args.pass_rate_threshold,
         "summary": summary,
