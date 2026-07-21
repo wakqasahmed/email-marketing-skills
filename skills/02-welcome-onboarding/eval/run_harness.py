@@ -45,22 +45,25 @@ def validate(records: list[dict], cases: list[dict], trials: int) -> dict:
 
 
 def prepare_workspace(workspace: Path, runner: Path, condition: str) -> None:
-    shutil.copy2(FIXTURES, workspace / "cases.json")
+    cases = json.loads(FIXTURES.read_text())["cases"]
+    blinded = {
+        "schema_version": 1,
+        "cases": [{"name": case["name"], "prompt": case["prompt"]} for case in cases],
+    }
+    (workspace / "cases.json").write_text(json.dumps(blinded, indent=2))
     shutil.copy2(runner, workspace / "runner")
     (workspace / "runner").chmod(0o755)
     if condition == "enabled":
         shutil.copy2(EVAL.parent / "SKILL.md", workspace / "SKILL.md")
 
 
-def isolated_command(workspace: Path, image: str, condition: str, trial: int, version: str) -> list[str]:
+def isolated_command(workspace: Path, image: str, version: str) -> list[str]:
     return [
         "docker", "run", "--rm", "--network", "none", "--read-only",
         "--tmpfs", "/tmp:rw,noexec,nosuid,size=64m",
         "--mount", f"type=bind,source={workspace},target=/workspace,readonly",
         "--env", "HOME=/nonexistent",
         "--env", "HARNESS_WORKSPACE=/workspace",
-        "--env", f"HARNESS_CONDITION={condition}",
-        "--env", f"HARNESS_TRIAL={trial}",
         "--env", f"HARNESS_VERSION={version}",
         "--workdir", "/workspace", image, "/workspace/runner",
     ]
@@ -90,13 +93,16 @@ def main() -> int:
                 workspace = Path(directory)
                 prepare_workspace(workspace, runner, condition)
                 result = subprocess.run(
-                    isolated_command(workspace, args.image, condition, trial, args.version),
+                    isolated_command(workspace, args.image, args.version),
                     text=True,
                     capture_output=True,
                     env={"PATH": os.environ["PATH"], "HOME": "/nonexistent"},
                     check=True,
                 )
-                records.extend(json.loads(result.stdout))
+                records.extend(
+                    {**record, "condition": condition, "trial": trial}
+                    for record in json.loads(result.stdout)
+                )
     summary = validate(records, cases, args.trials)
     args.output.write_text(json.dumps({"version": args.version, "image": args.image, "trials": args.trials, "summary": summary, "records": records}, indent=2))
     if summary["enabled_pass_rate"] < 0.8 or summary["delta"] <= 0:

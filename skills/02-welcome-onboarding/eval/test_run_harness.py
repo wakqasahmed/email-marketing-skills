@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """Regression tests for the isolated welcome-onboarding harness gate."""
 import importlib.util
+import json
+import tempfile
 import unittest
 from pathlib import Path
 
 
-HARNESS = Path(__file__).parent / "run_harness.py"
+EVAL = Path(__file__).parent
+HARNESS = EVAL / "run_harness.py"
 SPEC = importlib.util.spec_from_file_location("welcome_harness", HARNESS)
 MODULE = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader is not None
@@ -46,6 +49,27 @@ class HarnessValidationTests(unittest.TestCase):
     def test_requires_a_digest_pinned_image(self) -> None:
         with self.assertRaisesRegex(ValueError, "digest-pinned"):
             MODULE.require_digest_pinned_image("registry.example/welcome-harness:latest")
+
+    def test_workspace_and_command_do_not_leak_the_answer_key_or_condition(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            MODULE.prepare_workspace(workspace, EVAL / "run-eval.sh", "disabled")
+            runner_cases = json.loads((workspace / "cases.json").read_text())
+
+            if any(set(case) != {"name", "prompt"} for case in runner_cases["cases"]):
+                raise AssertionError("runner workspace leaked expected/candidate outcomes")
+            if (workspace / "SKILL.md").exists():
+                raise AssertionError("disabled workspace leaked the skill")
+
+            enabled_workspace = Path(directory) / "enabled"
+            enabled_workspace.mkdir()
+            MODULE.prepare_workspace(enabled_workspace, EVAL / "run-eval.sh", "enabled")
+            if not (enabled_workspace / "SKILL.md").exists():
+                raise AssertionError("enabled workspace omitted the skill")
+
+            command = MODULE.isolated_command(workspace, "example@sha256:" + "0" * 64, "fixture-version")
+            if any("HARNESS_CONDITION" in value or "HARNESS_TRIAL" in value for value in command):
+                raise AssertionError("runner command leaked the ablation condition or trial")
 
 
 if __name__ == "__main__":
