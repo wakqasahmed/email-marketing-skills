@@ -22,22 +22,22 @@ def matches(outcome: dict, expected: dict) -> bool:
 
 def validate(records: list[dict], keys: dict, trials: int) -> dict:
     expected = keys["outcomes"]
-    required = {(name, condition, trial) for name in expected for condition in ("with-skill", "without-skill") for trial in range(trials)}
+    required = {(name, condition, trial) for name in expected for condition in ("enabled", "disabled") for trial in range(trials)}
     record_keys = [(record.get("name"), record.get("condition"), record.get("trial")) for record in records]
     if set(record_keys) != required or len(records) != len(required) or any(count != 1 for count in Counter(record_keys).values()):
         raise ValueError("harness records must cover every case, condition, and trial exactly once")
     scores = {}
-    for condition in ("with-skill", "without-skill"):
+    for condition in ("enabled", "disabled"):
         condition_records = [record for record in records if record["condition"] == condition]
         scores[condition] = sum(matches(record.get("outcome", {}), expected[record["name"]]) for record in condition_records) / len(condition_records)
-    return {"with_skill_pass_rate": scores["with-skill"], "without_skill_pass_rate": scores["without-skill"], "delta": scores["with-skill"] - scores["without-skill"]}
+    return {"enabled_pass_rate": scores["enabled"], "disabled_pass_rate": scores["disabled"], "delta": scores["enabled"] - scores["disabled"]}
 
 
 def prepare_workspace(workspace: Path, runner: Path, condition: str) -> None:
     shutil.copy2(PROMPTS, workspace / "cases.json")
     shutil.copy2(runner, workspace / "runner")
     (workspace / "runner").chmod(0o755)
-    if condition == "with-skill":
+    if condition == "enabled":
         shutil.copy2(EVAL.parent / "SKILL.md", workspace / "SKILL.md")
 
 
@@ -70,7 +70,7 @@ def main() -> int:
         raise SystemExit("runner must be a repository-controlled executable")
     keys = json.loads(KEYS.read_text())
     records = []
-    for condition in ("with-skill", "without-skill"):
+    for condition in ("enabled", "disabled"):
         for trial in range(args.trials):
             with tempfile.TemporaryDirectory() as directory:
                 workspace = Path(directory)
@@ -78,7 +78,7 @@ def main() -> int:
                 result = subprocess.run(isolated_command(workspace, args.image, condition, trial), text=True, capture_output=True, env={"PATH": os.environ["PATH"]}, check=True)
                 records.extend(json.loads(result.stdout))
     summary = validate(records, keys, args.trials)
-    if summary["with_skill_pass_rate"] < THRESHOLD or summary["delta"] <= 0:
+    if summary["enabled_pass_rate"] < THRESHOLD or summary["delta"] <= 0:
         raise SystemExit(f"harness gate failed: {summary}")
     args.output.write_text(json.dumps({"schema_version": 1, "model": args.model, "harness_version": args.harness_version, "image": args.image, "trials": args.trials, "threshold": THRESHOLD, "summary": summary, "records": records}, indent=2))
     print(json.dumps(summary))

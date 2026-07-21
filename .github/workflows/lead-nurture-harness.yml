@@ -44,7 +44,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Run isolated with-skill and without-skill trials
+      - name: Run isolated enabled and disabled trials
         env:
           INPUT_RUNNER: ${{ inputs.runner }}
           INPUT_IMAGE: ${{ inputs.image }}

@@ -15,14 +15,14 @@ class HarnessValidationTest(unittest.TestCase):
         keys = {"outcomes": {"case": {"decision": "HOLD", "required_actions": ["verify-consent"]}}}
         records = []
         for trial in range(3):
-            records.append({"name": "case", "condition": "with-skill", "trial": trial, "outcome": {"decision": "HOLD", "actions": ["verify-consent"]}})
-            records.append({"name": "case", "condition": "without-skill", "trial": trial, "outcome": {"decision": "SEND", "actions": []}})
+            records.append({"name": "case", "condition": "enabled", "trial": trial, "outcome": {"decision": "HOLD", "actions": ["verify-consent"]}})
+            records.append({"name": "case", "condition": "disabled", "trial": trial, "outcome": {"decision": "SEND", "actions": []}})
 
-        self.assertEqual(MODULE.validate(records, keys, 3), {"with_skill_pass_rate": 1.0, "without_skill_pass_rate": 0.0, "delta": 1.0})
+        self.assertEqual(MODULE.validate(records, keys, 3), {"enabled_pass_rate": 1.0, "disabled_pass_rate": 0.0, "delta": 1.0})
 
     def test_rejects_duplicate_trial_records(self):
         keys = {"outcomes": {"case": {"decision": "HOLD", "required_actions": ["verify-consent"]}}}
-        record = {"name": "case", "condition": "with-skill", "trial": 0, "outcome": {"decision": "HOLD", "actions": ["verify-consent"]}}
+        record = {"name": "case", "condition": "enabled", "trial": 0, "outcome": {"decision": "HOLD", "actions": ["verify-consent"]}}
 
         with self.assertRaises(ValueError):
             MODULE.validate([record, record], keys, 3)
