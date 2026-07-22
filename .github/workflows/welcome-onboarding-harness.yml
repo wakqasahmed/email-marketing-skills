@@ -1,0 +1,44 @@
+name: welcome-onboarding-harness
+
+on:
+  workflow_dispatch:
+    inputs:
+      trials:
+        description: Trials per held-out case and condition
+        required: true
+        default: '3'
+        type: choice
+        options: ['3', '4', '5', '6']
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run isolated skill ablation
+        env:
+          RUNNER: ${{ vars.EMAIL_WELCOME_HARNESS }}
+          HARNESS_VERSION: ${{ vars.EMAIL_WELCOME_HARNESS_VERSION }}
+          HARNESS_IMAGE: ${{ vars.EMAIL_WELCOME_HARNESS_IMAGE }}
+          TRIALS: ${{ inputs.trials }}
+        run: |
+          test -n "$RUNNER"
+          test -n "$HARNESS_VERSION"
+          test -n "$HARNESS_IMAGE"
+          python3 skills/02-welcome-onboarding/eval/run_harness.py \
+            --runner "$RUNNER" \
+            --version "$HARNESS_VERSION" \
+            --image "$HARNESS_IMAGE" \
+            --trials "$TRIALS" \
+            --output welcome-onboarding-harness-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: welcome-onboarding-harness-${{ vars.EMAIL_WELCOME_HARNESS_VERSION }}-${{ inputs.trials }}-trials
+          path: welcome-onboarding-harness-report.json
