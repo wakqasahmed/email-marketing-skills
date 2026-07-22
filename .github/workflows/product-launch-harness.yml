@@ -1,0 +1,37 @@
+name: product-launch-harness
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate:
+    if: >-
+      vars.PRODUCT_LAUNCH_HARNESS != '' &&
+      vars.PRODUCT_LAUNCH_HARNESS_IMAGE != '' &&
+      vars.PRODUCT_LAUNCH_HARNESS_MODEL != '' &&
+      vars.PRODUCT_LAUNCH_HARNESS_VERSION != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: >-
+          python3 skills/05-product-launch/eval/run_harness.py
+          --runner "${{ vars.PRODUCT_LAUNCH_HARNESS }}"
+          --image "${{ vars.PRODUCT_LAUNCH_HARNESS_IMAGE }}"
+          --model "${{ vars.PRODUCT_LAUNCH_HARNESS_MODEL }}"
+          --harness-version "${{ vars.PRODUCT_LAUNCH_HARNESS_VERSION }}"
+          --trials 3
+          --pass-rate-threshold 0.8
+          --output product-launch-harness-results.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: product-launch-harness-results
+          path: product-launch-harness-results.json
+          retention-days: 90
