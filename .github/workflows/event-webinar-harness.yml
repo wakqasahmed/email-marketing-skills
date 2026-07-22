@@ -1,0 +1,34 @@
+name: event-webinar-harness
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 4 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate:
+    if: vars.EVENT_WEBINAR_HARNESS_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run isolated enabled-disabled harness
+        run: >-
+          python3 skills/06-event-webinar/eval/run_harness.py
+          --runner "${{ vars.EVENT_WEBINAR_HARNESS_RUNNER }}"
+          --image "${{ vars.EVENT_WEBINAR_HARNESS_IMAGE }}"
+          --trials 3
+          --threshold 0.8
+          --output artifacts/event-webinar-harness.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: event-webinar-harness-${{ github.run_id }}
+          path: artifacts/event-webinar-harness.json
+          if-no-files-found: warn
