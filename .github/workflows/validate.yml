@@ -24,6 +24,7 @@ jobs:
       - run: bash skills/eval/run-eval.sh
       - run: bash skills/00-email-marketing-guardrails/eval/run-eval.sh
       - run: bash skills/01-newsletter-editorial/eval/run-eval.sh
+      - run: bash skills/02-welcome-onboarding/eval/run-eval.sh
       - run: bash skills/04-promotional-offer/eval/run-eval.sh
       - run: python3 -m unittest skills/04-promotional-offer/eval/test_evaluation.py
       - run: bash skills/06-event-webinar/eval/run-eval.sh
